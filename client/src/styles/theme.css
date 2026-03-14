@@ -1,0 +1,174 @@
+:root[data-theme="dark"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --text-tertiary: #555555;
+  --accent-primary: #00ffff;
+  --accent-secondary: #0099ff;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glow-color: rgba(0, 255, 255, 0.3);
+}
+
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f7fa;
+  --text-primary: #1a1a1a;
+  --text-secondary: #333333;
+  --text-tertiary: #666666;
+  --accent-primary: #2196F3;
+  --accent-secondary: #1976D2;
+  --glass-bg: rgba(33, 150, 243, 0.08);
+  --glass-border: rgba(33, 150, 243, 0.2);
+  --glow-color: rgba(33, 150, 243, 0.2);
+}
+
+/* 3D Effects */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--glow-color);
+  transform: translateY(-4px);
+}
+
+/* 3D Perspective Button */
+.studio-btn {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 15px var(--glow-color);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.studio-btn:hover {
+  transform: translateY(-3px) rotateX(5deg);
+  box-shadow: 0 8px 25px var(--glow-color);
+}
+
+.studio-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Studio Input */
+.studio-input {
+  width: 100%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  font-family: inherit;
+}
+
+.studio-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--glow-color), inset 0 0 8px rgba(0, 0, 0, 0.05);
+  transform: translateZ(4px);
+}
+
+.studio-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Text Gradient */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 3D Card Transform */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) rotateX(-5deg) translateZ(10px);
+}
+
+/* Blob Float Animation */
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(20px, -30px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(30px, 30px) scale(1.02); }
+}
+
+.animate-blob-float {
+  animation: blob-float 7s ease-in-out infinite;
+}
+
+/* 3D Neon Glow (Dark Mode) */
+:root[data-theme="dark"] .neon-glow {
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 153, 255, 0.3),
+    0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* 3D Blue Glow (Light Mode) */
+:root[data-theme="light"] .neon-glow {
+  text-shadow:
+    0 0 10px rgba(33, 150, 243, 0.4),
+    0 0 20px rgba(25, 118, 210, 0.2);
+}
+
+/* Dock Blur Effect */
+.dock-blur {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-color: var(--glass-border);
+}
+
+/* 3D Hover Lift */
+.lift-3d {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+
+.lift-3d:hover {
+  transform: translateY(-8px) translateZ(0) perspective(1000px) rotateX(3deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-card {
+    border-radius: 16px;
+  }
+
+  .studio-btn {
+    border-radius: 10px;
+    padding: 10px 20px;
+  }
+
+  .studio-input {
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+}
