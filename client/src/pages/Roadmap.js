@@ -19,12 +19,18 @@ const Roadmap = () => {
     }
   }, [navigate]);
 
-  const handleSpeak = () => {
+  const handleSpeak = (voiceGender) => {
     if (isSpeaking) {
       speechSynthesis.cancel();
       setIsSpeaking(false);
     } else {
       const utterance = new SpeechSynthesisUtterance(roadmap);
+      const voices = speechSynthesis.getVoices();
+      if (voiceGender === 'male') {
+        utterance.voice = voices.find(voice => voice.name.includes('Google US English Male')) || voices.find(voice => voice.name.includes('Male') && voice.lang.startsWith('en'));
+      } else {
+        utterance.voice = voices.find(voice => voice.name.includes('Google US English Female')) || voices.find(voice => voice.name.includes('Female') && voice.lang.startsWith('en'));
+      }
       utterance.onend = () => setIsSpeaking(false);
       speechSynthesis.speak(utterance);
       setIsSpeaking(true);
@@ -61,7 +67,7 @@ const Roadmap = () => {
         <div className="roadmap-buttons">
           <button
             className="btn-speak"
-            onClick={handleSpeak}
+            onClick={() => handleSpeak('male')}
             disabled={!roadmap}
             style={{
               background: isDark 
@@ -73,7 +79,23 @@ const Roadmap = () => {
                 : "0 4px 15px rgba(33, 150, 243, 0.3)"
             }}
           >
-            {isSpeaking ? "Stop Audio" : "🔊 Read Roadmap"}
+            {isSpeaking ? "Stop Audio" : "🔊 Read (Male)"}
+          </button>
+          <button
+            className="btn-speak"
+            onClick={() => handleSpeak('female')}
+            disabled={!roadmap}
+            style={{
+              background: isDark 
+                ? "linear-gradient(135deg, #ff00d4, #ff0099)"
+                : "linear-gradient(135deg, #F321AB, #D21976)",
+              color: isDark ? "#000" : "#fff",
+              boxShadow: isDark
+                ? "0 4px 15px rgba(255, 0, 212, 0.3)"
+                : "0 4px 15px rgba(243, 33, 171, 0.3)"
+            }}
+          >
+            {isSpeaking ? "Stop Audio" : "🔊 Read (Female)"}
           </button>
           <button className="btn-home" onClick={handleBackToHome} style={{
             borderColor: isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(33, 150, 243, 0.3)",

@@ -79,7 +79,7 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ error: "All fields are required." });
 
     if (password.length < 6)
-      return res.status(400).json({ error: "Password must be at least 6 characters." });
+      return res.status(400).json({ error: "Password must be at last 6 characters." });
 
     const existing = await User.findOne({ email });
     if (existing)
@@ -156,13 +156,13 @@ app.post("/api/auth/forgot-password", async (req, res) => {
         to: user.email,
         subject: "Password Reset Request - SkillSync AI",
         html: `
-          <div style="font-family: Inter, sans-serif; max-width: 480px; margin: auto; padding: 32px; background: #0a0a0a; color: #ffffff; border-radius: 16px; border: 1px solid #222;">
-            <h2 style="margin-bottom: 8px;">Reset Your Password</h2>
-            <p style="color: #aaa; margin-bottom: 24px;">Click the button below to reset your SkillSync AI password. This link expires in <strong style="color:#fff">1 hour</strong>.</p>
-            <a href="${resetURL}" style="display:inline-block;padding:14px 28px;background:#ffffff;color:#0a0a0a;border-radius:10px;font-weight:700;text-decoration:none;margin-bottom:24px;">
+          <div style=\"font-family: Inter, sans-serif; max-width: 480px; margin: auto; padding: 32px; background: #0a0a0a; color: #ffffff; border-radius: 16px; border: 1px solid #222;\">
+            <h2 style=\"margin-bottom: 8px;\">Reset Your Password</h2>
+            <p style=\"color: #aaa; margin-bottom: 24px;\">Click the button below to reset your SkillSync AI password. This link expires in <strong style=\"color:#fff\">1 hour</strong>.</p>
+            <a href=\"${resetURL}\" style=\"display:inline-block;padding:14px 28px;background:#ffffff;color:#0a0a0a;border-radius:10px;font-weight:700;text-decoration:none;margin-bottom:24px;\">
               Reset Password
             </a>
-            <p style="color:#555;font-size:12px;">If you didn't request this, ignore this email.</p>
+            <p style=\"color:#555;font-size:12px;\">If you didn\'t request this, ignore this email.</p>
           </div>
         `
       });
@@ -221,6 +221,7 @@ app.get("/api/auth/me", async (req, res) => {
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET);
+_SECRET);
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) return res.status(401).json({ error: "User not found." });
@@ -244,32 +245,21 @@ app.post("/api/analyze", async (req, res) => {
       ? `targeting a role at ${company}`
       : "for a general tech role";
 
+    const prompt = `Analyze this resume ${companyContext}.\n\nProvide:\n1. TOP 5 SKILL GAPS (with brief explanation)\n2. 3-MONTH ROADMAP (with weekly milestones and specific resources)\n3. KEY STRENGTHS (2-3 points)\n\nResume:\n${resumeText}`;
+
     const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
+      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "You are an expert AI career advisor. Analyze resumes, identify skill gaps, and create detailed, actionable preparation roadmaps. Be specific with resource recommendations and timelines."
-          },
-          {
-            role: "user",
-            content: `Analyze this resume ${companyContext}.\n\nProvide:\n1. TOP 5 SKILL GAPS (with brief explanation)\n2. 3-MONTH ROADMAP (with weekly milestones and specific resources)\n3. KEY STRENGTHS (2-3 points)\n\nResume:\n${resumeText}`
-          }
-        ],
-        max_tokens: 900
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+        contents: [{
+          parts: [{
+            text: prompt
+          }]
+        }]
       }
     );
 
     res.json({
-      analysis: response.data.choices[0].message.content,
+      analysis: response.data.candidates[0].content.parts[0].text,
       company: company || "General"
     });
   } catch (error) {
