@@ -1,6 +1,6 @@
 // Central API utility — all backend calls go through here
 // "proxy": "http://localhost:5000" in package.json routes /api/* → backend
-const BASE = "/api";
+const BASE = process.env.REACT_APP_API_URL || "/api";
 
 /* ─── helpers ──────────────────────────────────────────────────── */
 const post = async (url, body = {}) => {
