@@ -1,62 +1,69 @@
 # SkillSync AI 🚀
 
-**SkillSync AI** is a cutting-edge, AI-powered career development platform designed to bridge the gap between your current skills and your dream job. By analyzing your resume against the high standards of top tech companies (Google, Meta, Amazon, Netflix, etc.), SkillSync AI identifies skill deficiencies and generates a personalized, actionable career roadmap to help you succeed.
+**SkillSync AI** is a state-of-the-art, AI-powered career development platform designed to bridge the gap between your current expertise and your dream job. By leveraging the power of **Groq AI (Llama 3.3 70B)**, the platform analyzes your resume against the rigorous standards of top-tier tech companies like Google, Meta, and Amazon, providing a personalized, actionable 3-month roadmap to success.
 
 ---
 
-## ✨ Features
+## ✨ Core Features
 
-- 📄 **Intelligent Resume Analysis** — Uses Groq AI (Llama 3.3 70B) to parse and evaluate your resume with high accuracy.
-- 🏢 **Targeted Benchmarking** — Compare your profile against requirements for specific roles at top-tier tech companies.
-- 🗺️ **Personalized Career Roadmaps** — Get a step-by-step learning path tailored to your unique skill gaps.
-- 🤖 **Interactive AI Assistant** — A persistent, intelligent chat assistant to help you navigate your career journey.
-- 🔊 **Text-to-Speech Integration** — Listen to your AI-generated roadmap and career advice.
-- 🔐 **Secure Authentication** — Full JWT-based authentication system with password reset functionality.
-- 🌓 **Adaptive Theme System** — Seamlessly switch between Dark and Light modes for a comfortable experience.
-- 🎭 **Smooth Animations** — Beautifully crafted transitions and interactions using Framer Motion.
+### 📄 Intelligent Resume Parsing
+- **Multi-format Support**: Seamlessly upload PDF, DOCX, or TXT files.
+- **Privacy First**: Automatic sanitization of sensitive data (emails, secrets) before processing.
+- **Deep Extraction**: Uses high-performance parsing to extract meaningful professional context.
+
+### 🏢 Targeted Benchmarking
+- **Company-Specific Insights**: Compare your profile against specific requirements for roles at top tech firms.
+- **Granular Analysis**: Identify exact skill gaps in technical, architectural, and methodology domains.
+
+### 🗺️ AI-Generated 3-Month Roadmaps
+- **Month 1 (Deep Foundations)**: A day-by-day learning plan to solidify core concepts.
+- **Month 2 (Implementation)**: Guidance on building a production-grade project to demonstrate mastery.
+- **Month 3 (Mastery & Career)**: Focus on advanced system design, algorithms, and behavioral interview techniques.
+
+### 🤖 Interactive AI Assistant
+- **Persistent Support**: A floating AI chat assistant powered by Groq AI to answer career-related queries instantly.
+- **Context-Aware**: Provides concise, bulleted advice tailored to your journey.
+
+### 🔐 Robust Security & UX
+- **Secure Auth**: JWT-based authentication with bcrypt password hashing.
+- **Password Recovery**: Integrated email service for secure password resets.
+- **Adaptive UI**: Seamless Dark/Light mode transition with a modern, responsive design using Tailwind CSS and Framer Motion.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **React.js** — Modern UI components and state management.
-- **Tailwind CSS** — Utility-first styling for a sleek, responsive design.
-- **Framer Motion** — High-performance web animations.
-- **React Router** — Seamless navigation with protected routes.
-- **Context API** — Global state management for themes and user sessions.
-
-### Backend
-- **Node.js & Express.js** — Fast and scalable server architecture.
-- **MongoDB Atlas** — Cloud-based NoSQL database for user data and analysis history.
-- **Groq AI (Llama 3.3 70B)** — Advanced Large Language Model for deep analysis and roadmap generation.
-- **JWT & bcryptjs** — Secure password hashing and session management.
-- **Nodemailer** — Professional email handling for password recovery.
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React.js, Tailwind CSS, Framer Motion, Lucide Icons, React Router |
+| **Backend** | Node.js, Express.js, MongoDB Atlas, Multer, PDF-Parse |
+| **AI/ML** | Groq AI (Llama-3.3-70b-versatile) |
+| **Services** | Nodemailer (Email), JWT (Security), Axios (API) |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account
-- [Groq AI API Key](https://wow.groq.com/)
+- **Node.js**: v18 or higher
+- **MongoDB**: Atlas account or local instance
+- **Groq AI**: API Key from [Groq Console](https://console.groq.com/)
 
 ### Installation
 
-1. **Clone the repository:**
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/NAVEENKumar207/Skillsync-ai.git
    cd Skillsync-ai
    ```
 
-2. **Setup Backend:**
+2. **Backend Setup**
    ```bash
    cd server
    npm install
    ```
 
-3. **Setup Frontend:**
+3. **Frontend Setup**
    ```bash
    cd ../client
    npm install
@@ -64,7 +71,7 @@
 
 ### Environment Configuration
 
-Create a `.env` file in the `server` directory and configure the following variables:
+Create a `.env` file in the `server` directory:
 
 ```env
 PORT=5000
@@ -78,52 +85,34 @@ EMAIL_PASS=your_app_password
 CLIENT_URL=http://localhost:3000
 ```
 
-### Running the Application
-
-1. **Start the Backend Server:**
-   ```bash
-   cd server
-   npm start
-   ```
-   The server will run on `http://localhost:5000`.
-
-2. **Start the Frontend Application:**
-   ```bash
-   cd client
-   npm start
-   ```
-   The application will be available at `http://localhost:3000`.
-
 ---
 
 ## 📂 Project Structure
 
 ```text
 Skillsync-ai/
-├── client/              # React Frontend
+├── client/              # React Frontend (Vite/CRA)
 │   ├── src/
-│   │   ├── components/  # Reusable UI components (Assistant, ThemeToggle, etc.)
-│   │   ├── context/     # Global state (ThemeContext)
-│   │   ├── pages/       # Application views (Dashboard, Analysis, Roadmap, etc.)
-│   │   ├── styles/      # Global CSS and themes
-│   │   └── utils/       # API services and helpers
+│   │   ├── components/  # Reusable UI (Assistant, ProtectedRoute, etc.)
+│   │   ├── pages/       # Dashboard, Analysis, Roadmap, Landing, etc.
+│   │   ├── styles/      # Tailwind configurations & Global CSS
+│   │   └── utils/       # API services & Helper functions
 ├── server/              # Express Backend
-│   ├── server.js        # Core logic, routes, and AI integration
-│   └── .env             # Environment configuration (not committed)
-└── README.md
+│   ├── server.js        # API Routes, AI Integration, & DB Logic
+│   └── .env             # Sensitive Configuration (Ignored by Git)
+└── README.md            # Project Documentation
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+We welcome contributions! Please follow these steps:
+1. **Fork** the repository.
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`).
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`).
+4. **Push** to the branch (`git push origin feature/AmazingFeature`).
+5. **Open** a Pull Request.
 
 ---
 

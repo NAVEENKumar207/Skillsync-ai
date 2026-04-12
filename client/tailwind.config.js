@@ -1,37 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        studio: {
-          bg: "#0a0a0a",
-          section: "#111111",
-          card: "rgba(255,255,255,0.03)",
-          border: "rgba(255,255,255,0.08)",
-          text: "#ffffff",
-          muted: "#aaaaaa",
-        },
+        retro: {
+          bg:       'var(--retro-bg)',
+          yellow:   'var(--retro-yellow)',
+          dark:     'var(--retro-text)',
+          text:     'var(--retro-text)',
+          muted:    'var(--retro-muted)',
+          border:   'var(--retro-text)',
+          grid:     'var(--retro-grid)',
+          card:     'var(--retro-card-bg)',
+        }
+      },
+      fontFamily: {
+        display: ['"Arial Black"', 'Impact', 'sans-serif'],
+        body:    ['Georgia', 'serif'],
+        label:   ['Arial', 'sans-serif'],
+      },
+      borderWidth: {
+        'retro': '2.5px',
       },
       animation: {
-        "blob-float": "blobFloat 18s infinite alternate ease-in-out",
-        "fade-up": "fadeUp 0.8s ease-out forwards",
-        "underline-in": "underlineIn 0.5s ease forwards",
+        marquee: 'marquee 14s linear infinite',
       },
       keyframes: {
-        blobFloat: {
-          "0%": { transform: "translate(0px, 0px)" },
-          "100%": { transform: "translate(20px, -30px)" },
-        },
-        fadeUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        underlineIn: {
-          "0%": { width: "0%" },
-          "100%": { width: "100%" },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

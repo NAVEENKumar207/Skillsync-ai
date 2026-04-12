@@ -1,10 +1,19 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { FaBrain, FaVolumeUp, FaVolumeMute, FaArrowRight, FaExclamationTriangle } from "react-icons/fa";
-import { ThemeToggle } from '../components/ThemeToggle';
-import { ThemeContext } from '../context/ThemeContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { FaBrain, FaVolumeUp, FaVolumeMute, FaArrowRight, FaExclamationTriangle, FaArrowLeft } from "react-icons/fa";
 import { analyzeResume } from '../utils/api';
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 // Parse AI response into structured sections
 function parseAnalysis(text) {
@@ -18,7 +27,6 @@ function parseAnalysis(text) {
     "QUICK WINS": ["quick win", "this week"],
   };
 
-  // Split by ## headings
   const parts = text.split(/##\s+/g).filter(Boolean);
   if (parts.length > 1) {
     parts.forEach((part) => {
@@ -34,7 +42,6 @@ function parseAnalysis(text) {
     });
   }
 
-  // Fallback: return raw text if structured parsing fails
   if (Object.keys(sections).length === 0) {
     sections["FULL ANALYSIS"] = text;
   }
@@ -42,25 +49,14 @@ function parseAnalysis(text) {
   return sections;
 }
 
-const sectionConfig = {
-  "TARGET GOAL": { icon: "🎯", color: "#2196F3", bgDark: "rgba(33,150,243,0.08)", bgLight: "rgba(33,150,243,0.05)", borderDark: "rgba(33,150,243,0.2)", borderLight: "rgba(33,150,243,0.15)" },
-  "CANDIDATE PROFILE": { icon: "👤", color: "#8b5cf6", bgDark: "rgba(139,92,246,0.08)", bgLight: "rgba(139,92,246,0.05)", borderDark: "rgba(139,92,246,0.2)", borderLight: "rgba(139,92,246,0.15)" },
-  "SKILL GAPS": { icon: "⚡", color: "#ef4444", bgDark: "rgba(239,68,68,0.08)", bgLight: "rgba(239,68,68,0.05)", borderDark: "rgba(239,68,68,0.2)", borderLight: "rgba(239,68,68,0.15)" },
-  "ROADMAP": { icon: "🗺️", color: "#2196F3", bgDark: "rgba(33,150,243,0.08)", bgLight: "rgba(33,150,243,0.05)", borderDark: "rgba(33,150,243,0.2)", borderLight: "rgba(33,150,243,0.15)" },
-  "STRENGTHS": { icon: "💪", color: "#22c55e", bgDark: "rgba(34,197,94,0.08)", bgLight: "rgba(34,197,94,0.05)", borderDark: "rgba(34,197,94,0.2)", borderLight: "rgba(34,197,94,0.15)" },
-  "QUICK WINS": { icon: "🎯", color: "#f59e0b", bgDark: "rgba(245,158,11,0.08)", bgLight: "rgba(245,158,11,0.05)", borderDark: "rgba(245,158,11,0.2)", borderLight: "rgba(245,158,11,0.15)" },
-  "FULL ANALYSIS": { icon: "📋", color: "#8b5cf6", bgDark: "rgba(139,92,246,0.08)", bgLight: "rgba(139,92,246,0.05)", borderDark: "rgba(139,92,246,0.2)", borderLight: "rgba(139,92,246,0.15)" },
-};
-
 function Analysis() {
   const [phase, setPhase] = useState("loading"); // "loading" | "done" | "error"
   const [sections, setSections] = useState({});
   const [rawAnalysis, setRawAnalysis] = useState("");
   const [error, setError] = useState('');
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [company, setCompany] = useState("General");
-  const [role, setRole] = useState("Software Engineer");
-  const { isDark } = useContext(ThemeContext);
+  const [company, setCompany] = useState("GENERAL");
+  const [role, setRole] = useState("SOFTWARE ENGINEER");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,8 +69,8 @@ function Analysis() {
       const resumeText = localStorage.getItem('resumeText');
       const selectedCompany = localStorage.getItem('selectedCompany') || '';
       const selectedRole = localStorage.getItem('selectedRole') || '';
-      setCompany(selectedCompany || "General");
-      setRole(selectedRole || "Software Engineer");
+      setCompany(selectedCompany.toUpperCase() || "GENERAL");
+      setRole(selectedRole.toUpperCase() || "SOFTWARE ENGINEER");
 
       if (!resumeText) {
         setError('No resume found. Please go back and upload your resume first.');
@@ -109,55 +105,55 @@ function Analysis() {
     speechSynthesis.speak(utterance);
   };
 
-  const bg = isDark ? "#0a0a0a" : "#ffffff";
-  const textPrimary = isDark ? "#ffffff" : "#0a0a0a";
-  const textMuted = isDark ? "#aaaaaa" : "#666666";
-
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: bg, color: textPrimary }}>
-      <ThemeToggle />
+    <div className="min-h-screen text-retro-dark font-body selection:bg-retro-yellow selection:text-retro-dark relative overflow-x-hidden p-6 py-12 transition-colors duration-300">
+      <Star className="absolute top-10 left-[10%] opacity-70 animate-star" size={28} />
+      <Star className="absolute bottom-10 right-[10%] opacity-60 animate-star" size={32} />
 
-      {/* Ambient */}
-      <div className="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none animate-blob-float"
-        style={{ background: isDark ? "radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)" : "radial-gradient(circle, rgba(33,150,243,0.06) 0%, transparent 70%)" }} />
+      <div className="max-w-6xl mx-auto relative z-10">
+        <Link to="/role" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
+          <FaArrowLeft size={10} /> Back to Role
+        </Link>
 
-      <div className="max-w-5xl mx-auto px-6 py-20">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full mb-4"
-            style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.08)", border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(33,150,243,0.2)"}` }}>
-            <span className="text-sm font-medium" style={{ color: textMuted }}>
-              🎯 {company} • {role}
-            </span>
+        <div className="text-center mb-16">
+          <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
+            ★ STEP 04: ANALYSIS
           </div>
-          <h1 className="text-5xl font-black mb-3 tracking-tight" style={{ color: textPrimary }}>
-            {phase === "loading" ? "Analyzing Resume..." : "Analysis Complete"}
+          <div className="inline-block border-2 border-retro-dark bg-[var(--retro-card-bg)] px-4 py-1 text-[11px] font-black uppercase tracking-widest mb-6">
+            {company} • {role}
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-black uppercase mb-4 text-retro-dark leading-none">
+            {phase === "loading" ? (
+              <>AI ENGINE <span className="text-retro-yellow text-stroke-dark">RUNNING</span></>
+            ) : (
+              <>ANALYSIS <span className="text-retro-yellow text-stroke-dark">COMPLETE</span></>
+            )}
           </h1>
-          <p style={{ color: textMuted }}>
-            {phase === "loading" ? "AI is processing your resume..." : "Your personalized career roadmap is ready."}
-          </p>
-        </motion.div>
+        </div>
 
         {/* Loading State */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {phase === "loading" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center py-32">
+              className="flex flex-col items-center justify-center py-20 retro-card">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                className="w-24 h-24 rounded-full flex items-center justify-center mb-8"
-                style={{ border: `3px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(33,150,243,0.2)"}`, borderTopColor: isDark ? "#ffffff" : "#2196F3" }}>
-                <FaBrain className="text-4xl" style={{ color: isDark ? "#ffffff" : "#2196F3" }} />
+                className="w-24 h-24 border-[4px] border-retro-dark flex items-center justify-center mb-10 bg-retro-yellow shadow-[6px_6px_0px_var(--retro-text)]"
+              >
+                <FaBrain className="text-4xl text-black" />
               </motion.div>
-              <p className="text-xl font-bold mb-2" style={{ color: textPrimary }}>AI is thinking...</p>
-              <p className="text-sm" style={{ color: textMuted }}>This usually takes 10–30 seconds</p>
-              <div className="flex gap-2 mt-6">
-                {["Parsing resume", "Identifying gaps", "Building roadmap", "Finalizing..."].map((step, i) => (
-                  <motion.span key={step} initial={{ opacity: 0 }} animate={{ opacity: [0.3, 1, 0.3] }}
+              <h2 className="text-2xl font-display font-black uppercase mb-2 text-retro-dark">Neural Engine Processing</h2>
+              <p className="text-sm font-body text-retro-dark opacity-60 mb-10">This usually takes 10–30 seconds...</p>
+              
+              <div className="flex flex-wrap justify-center gap-3">
+                {["PARSING...", "IDENTIFYING GAPS...", "BUILDING ROADMAP...", "FINALIZING..."].map((step, i) => (
+                  <motion.span key={step} 
+                    animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ repeat: Infinity, duration: 2, delay: i * 0.5 }}
-                    className="text-xs px-3 py-1 rounded-full font-medium"
-                    style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.08)", color: textMuted }}>
+                    className="text-[10px] px-4 py-2 bg-[var(--retro-text)] text-[var(--retro-bg)] font-black uppercase tracking-widest border-2 border-retro-dark"
+                  >
                     {step}
                   </motion.span>
                 ))}
@@ -167,23 +163,21 @@ function Analysis() {
         </AnimatePresence>
 
         {/* Error State */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {phase === "error" && (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center text-center py-20">
-              <FaExclamationTriangle className="text-6xl text-red-400 mb-6" />
-              <h2 className="text-2xl font-bold mb-3" style={{ color: textPrimary }}>Analysis Failed</h2>
-              <p className="mb-8 max-w-md" style={{ color: textMuted }}>{error}</p>
-              <div className="flex gap-4 flex-wrap justify-center">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="flex flex-col items-center text-center py-20 retro-card !bg-[var(--retro-text)] !text-[var(--retro-bg)]">
+              <FaExclamationTriangle className="text-6xl text-retro-yellow mb-8" />
+              <h2 className="text-3xl font-display font-black uppercase mb-4">Analysis Failed</h2>
+              <p className="mb-10 max-w-md opacity-70 font-body">{error}</p>
+              <div className="flex gap-6 flex-wrap justify-center">
                 <button onClick={() => { setPhase("loading"); setError(""); fetchAnalysis(); }}
-                  className="px-6 py-3 rounded-xl font-bold transition-all"
-                  style={{ background: isDark ? "#ffffff" : "#2196F3", color: isDark ? "#0a0a0a" : "#ffffff" }}>
-                  Retry
+                  className="retro-btn-primary !bg-retro-yellow !text-black !border-retro-yellow">
+                  RETRY ENGINE
                 </button>
                 <button onClick={() => navigate("/upload")}
-                  className="px-6 py-3 rounded-xl font-bold transition-all"
-                  style={{ background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(33,150,243,0.3)"}`, color: textPrimary }}>
-                  Re-upload Resume
+                  className="retro-btn-secondary !text-[var(--retro-bg)] !border-[var(--retro-bg)] opacity-20 hover:opacity-100 transition-opacity">
+                  RE-UPLOAD RESUME
                 </button>
               </div>
             </motion.div>
@@ -191,69 +185,61 @@ function Analysis() {
         </AnimatePresence>
 
         {/* Results */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {phase === "done" && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               {/* Section Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 {Object.entries(sections).map(([key, content], idx) => {
-                  const cfg = sectionConfig[key] || sectionConfig["FULL ANALYSIS"];
+                  const isYellow = key === "SKILL GAPS" || key === "QUICK WINS";
                   return (
                     <motion.div
                       key={key}
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.15 }}
-                      className={`rounded-2xl p-6 ${key === "ROADMAP" || key === "FULL ANALYSIS" ? "md:col-span-2" : ""}`}
-                      style={{
-                        background: isDark ? cfg.bgDark : cfg.bgLight,
-                        border: `1px solid ${isDark ? cfg.borderDark : cfg.borderLight}`,
-                      }}
+                      transition={{ delay: idx * 0.1 }}
+                      className={`retro-card !p-8 group hover:bg-[var(--retro-card-bg)] ${key === "ROADMAP" || key === "FULL ANALYSIS" ? "md:col-span-2" : ""}`}
+                      style={isYellow ? { backgroundColor: '#E8C822', color: '#222' } : {}}
                     >
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="text-2xl">{cfg.icon}</span>
-                        <h3 className="text-lg font-bold tracking-wide" style={{ color: cfg.color }}>{key}</h3>
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="text-[32px] font-display font-black leading-none" style={{ color: isYellow ? '#222' : '#E8C822', WebkitTextStroke: '2px var(--retro-text)' }}>
+                          ★
+                        </div>
+                        <h3 className={`text-xl font-display font-black uppercase tracking-tight ${isYellow ? 'text-black' : 'text-retro-dark'}`}>{key}</h3>
                       </div>
-                      <div className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: isDark ? "#d0d0d0" : "#444444" }}>
+                      <div className={`text-sm leading-relaxed whitespace-pre-wrap font-body ${isYellow ? 'text-black opacity-80' : 'text-retro-dark opacity-80'} prose prose-sm max-w-none`}>
                         {content}
                       </div>
+                      <Star className="absolute -bottom-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
                     </motion.div>
                   );
                 })}
               </div>
 
               {/* Action Buttons */}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
-                className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-wrap gap-6 justify-center items-center pb-12">
                 <button
                   onClick={() => navigate("/roadmap")}
-                  className="flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg transition-all"
-                  style={{ background: isDark ? "#ffffff" : "#2196F3", color: isDark ? "#0a0a0a" : "#ffffff", boxShadow: isDark ? "0 8px 24px rgba(255,255,255,0.15)" : "0 8px 24px rgba(33,150,243,0.3)" }}
+                  className="retro-btn-primary !py-5 !px-10 text-lg flex items-center gap-3"
                 >
-                  View Full Roadmap <FaArrowRight />
+                  VIEW FULL ROADMAP <FaArrowRight />
                 </button>
 
                 <button
                   onClick={handleSpeak}
-                  className="flex items-center gap-3 px-6 py-4 rounded-xl font-bold transition-all"
-                  style={{
-                    background: isSpeaking ? "rgba(239,68,68,0.15)" : isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.08)",
-                    border: `1px solid ${isSpeaking ? "rgba(239,68,68,0.3)" : isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}`,
-                    color: isSpeaking ? "#ef4444" : textPrimary,
-                  }}
+                  className={`retro-btn-secondary !py-5 !px-8 flex items-center gap-3 ${isSpeaking ? "!bg-[var(--retro-text)] !text-[var(--retro-bg)]" : ""}`}
                 >
                   {isSpeaking ? <FaVolumeMute /> : <FaVolumeUp />}
-                  {isSpeaking ? "Stop" : "Listen"}
+                  {isSpeaking ? "STOP AUDIO" : "LISTEN TO AI"}
                 </button>
 
                 <button
                   onClick={() => { localStorage.removeItem("selectedCompany"); navigate("/company"); }}
-                  className="px-6 py-4 rounded-xl font-bold transition-all"
-                  style={{ background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}`, color: textMuted }}
+                  className="text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors"
                 >
-                  Change Company
+                  CHANGE TARGET
                 </button>
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

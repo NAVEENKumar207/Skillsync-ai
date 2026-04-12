@@ -1,221 +1,210 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { FaInstagram, FaLinkedin, FaGithub, FaEnvelope, FaHome, FaUser } from "react-icons/fa";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { ThemeContext } from "../context/ThemeContext";
+import { motion } from "framer-motion";
+import { FaInstagram, FaLinkedin, FaGithub, FaEnvelope, FaSun, FaMoon } from "react-icons/fa";
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 function Landing() {
-  const { scrollYProgress } = useScroll();
-  const opacityHero = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const { isDark } = useContext(ThemeContext);
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen text-white relative font-sans" style={{ 
-      backgroundColor: isDark ? "#0a0a0a" : "#ffffff",
-      color: isDark ? "#ffffff" : "#0a0a0a"
-    }}>
-      <ThemeToggle />
-
-      {/* 3D Ambient Lights with Theme */}
-      <div className="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none animate-blob-float" style={{ 
-        background: isDark 
-          ? "radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)"
-          : "radial-gradient(circle, rgba(33,150,243,0.08) 0%, transparent 70%)"
-      }}></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none animate-blob-float" style={{ 
-        background: isDark
-          ? "radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%)"
-          : "radial-gradient(circle, rgba(33,150,243,0.05) 0%, transparent 70%)",
-        animationDelay: "4s"
-      }}></div>
-
-      {/* Hero Section with 3D */}
-      <motion.section
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden perspective"
-        style={{ opacity: opacityHero }}
-        id="home"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 30, rotateX: 10 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-center z-10 max-w-4xl"
-          style={{ transformPerspective: 1000 }}
-        >
-          <motion.h1
-            className="text-6xl md:text-8xl font-black mb-6 tracking-tighter neon-glow"
-            initial={{ opacity: 0, y: 20, z: -100 }}
-            animate={{ opacity: 1, y: 0, z: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}
+    <div className="min-h-screen text-retro-dark font-body selection:bg-retro-yellow selection:text-retro-dark transition-colors duration-300">
+      
+      {/* Navigation Bar */}
+      <nav className="border-b-2 border-retro-dark px-6 py-4 flex items-center justify-between sticky top-0 retro-nav z-50">
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="border-retro-yellow border-[2.5px] px-2.5 py-1 transition-colors duration-200 group-hover:bg-retro-dark">
+            <span className="font-display font-black text-[15px] uppercase tracking-[2px] transition-colors duration-200 group-hover:text-white">
+              SkillSync AI
+            </span>
+          </div>
+        </Link>
+        <div className="hidden md:flex items-center gap-8">
+          {/* Navigation links removed */}
+        </div>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 border-2 border-retro-dark rounded-[4px] hover:bg-retro-yellow transition-colors"
+            title="Toggle Theme"
           >
-            Building <br />
-            <span className="text-gradient">Intelligent AI Experiences</span>
-          </motion.h1>
+            {isDark ? <FaSun className="text-retro-yellow" /> : <FaMoon />}
+          </button>
+          <Link to="/signup" className="retro-btn-primary !py-2 !px-5 !text-[11px] !bg-retro-yellow !text-retro-dark">
+            Get Started
+          </Link>
+        </div>
+      </nav>
 
-          <motion.p
-            className="text-xl md:text-2xl mb-12 font-light max-w-2xl mx-auto leading-relaxed"
-            style={{ color: isDark ? "#aaaaaa" : "#555555" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            I engineer next-generation systems, blending intuitive design with state-of-the-art machine learning.
-          </motion.p>
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-32 px-6 overflow-hidden border-b-2 border-retro-dark" id="home">
+        {/* Decorative Stars */}
+        <Star className="absolute top-10 left-[10%] opacity-70 animate-star" size={28} />
+        <Star className="absolute top-40 right-[15%] opacity-50 animate-star" size={22} filled={false} />
+        <Star className="absolute bottom-20 left-[20%] opacity-60 animate-star" size={16} />
+        <Star className="absolute top-1/2 right-[5%] opacity-80 animate-star" size={32} />
 
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-display font-black mb-8 leading-[1.1] tracking-tight text-retro-dark"
           >
-            <Link to="/login">
-              <button className="studio-btn px-8 py-4 font-semibold text-lg">
-                Try SkillSync AI
-              </button>
+            <span className="text-stroke-dark">BUILDING</span> <br />
+            <span className="text-retro-yellow text-stroke-dark-thick">INTELLIGENT</span> <br />
+            <span className="text-stroke-dark">SKILLS FOR AI</span>
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-lg md:text-xl text-retro-dark opacity-80 max-w-xl mx-auto mb-12 leading-relaxed font-body"
+          >
+            Engineer your career with next-generation AI analysis. 
+            Blending intuitive roadmap design with state-of-the-art skill gap detection.
+          </motion.p>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+          >
+            <Link to="/login" className="retro-btn-primary">
+              Analyze My Resume
             </Link>
-            <a href="#contact">
-              <button className="px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 lift-3d" style={{ 
-                color: isDark ? "#aaaaaa" : "#555555",
-                border: isDark ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(33,150,243,0.3)",
-                background: isDark ? "rgba(255,255,255,0.05)" : "rgba(33,150,243,0.05)"
-              }}>
-                Contact Me
-              </button>
-            </a>
-          </motion.div>
-        </motion.div>
-
-        {/* 3D Glass Card Preview */}
-        <motion.div
-          className="absolute bottom-[-15%] w-[80%] md:w-[60%] h-[30vh] glass-card rounded-t-[40px] z-0 card-3d"
-          initial={{ y: 200, rotateX: 45, opacity: 0 }}
-          animate={{ y: 0, rotateX: 15, opacity: 1 }}
-          transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-          style={{ transformPerspective: 1000 }}
-        />
-      </motion.section>
-
-      {/* About Section */}
-      <section id="about" className="py-32 px-6 relative z-10" style={{ 
-        borderTop: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(33,150,243,0.15)",
-        backgroundColor: isDark ? "#111111" : "#f5f7fa"
-      }}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
-          <motion.div
-            className="flex-1"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6" style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}>
-              Architect of <br /> <span className="text-gradient">Tomorrow.</span>
-            </h2>
-            <div className="h-px w-24 mb-8" style={{ background: isDark ? "rgba(255,255,255,0.2)" : "rgba(33,150,243,0.3)" }} />
-          </motion.div>
-          <motion.div
-            className="flex-1 glass-card p-10 rounded-3xl relative overflow-hidden card-3d"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <p className="text-lg leading-relaxed font-light relative z-10" style={{ color: isDark ? "#aaaaaa" : "#555555" }}>
-              I am an AI Developer &amp; CSBS Student focused on building highly intelligent, scalable systems. With a startup mindset and a relentless drive for innovation, I engineer platforms that merge powerful backend capabilities with breathtaking cinematic frontend experiences.
-            </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-32 px-6 relative z-10 pb-64" style={{ 
-        borderTop: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(33,150,243,0.15)"
-      }}>
-        <div className="max-w-4xl mx-auto text-center glass-card p-16 rounded-[3rem] card-3d">
-          <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}
-          >
-            Let's Build Something <span className="text-gradient">Powerful</span>
-          </motion.h2>
-          <motion.p
-            className="text-lg mb-12"
-            style={{ color: isDark ? "#aaaaaa" : "#555555" }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            I'm currently open to collaborations, innovative projects, and new opportunities.
-          </motion.p>
+      {/* Marquee Ticker */}
+      <div className="marquee-container">
+        <div className="marquee-inner border-y-2 border-retro-dark bg-[var(--retro-bg)]">
+          <span className="marquee-text">★ AI-POWERED</span>
+          <span className="marquee-text">★ CAREER ROADMAP</span>
+          <span className="marquee-text">★ SKILL ANALYSIS</span>
+          <span className="marquee-text">★ RESUME REVIEW</span>
+          <span className="marquee-text">★ TOP COMPANIES</span>
+          <span className="marquee-text">★ AI-POWERED</span>
+          <span className="marquee-text">★ CAREER ROADMAP</span>
+          <span className="marquee-text">★ SKILL ANALYSIS</span>
+          <span className="marquee-text">★ RESUME REVIEW</span>
+          <span className="marquee-text">★ TOP COMPANIES</span>
+        </div>
+      </div>
 
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+      {/* Features Row */}
+      <section className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-retro-dark" id="features">
+        {[
+          { num: '01', title: 'Resume Analysis', desc: 'Detailed breakdown of your current skill set against industry standards.' },
+          { num: '02', title: 'Career Roadmap', desc: 'Personalized step-by-step guide to landing your dream job at top companies.' },
+          { num: '03', title: 'AI Assistant', desc: 'Real-time guidance and feedback to help you navigate your career journey.' }
+        ].map((f, i) => (
+          <div key={i} className={`p-10 md:p-12 border-b-2 md:border-b-0 md:border-r-2 border-retro-dark last:border-r-0 hover:bg-[var(--retro-card-bg)] transition-colors duration-150`}>
+            <div className="text-[44px] font-display font-black text-outline-yellow mb-6">
+              {f.num}
+            </div>
+            <h3 className="text-xl font-display font-black uppercase mb-4 text-retro-dark">
+              {f.title}
+            </h3>
+            <p className="text-sm md:text-base text-retro-dark opacity-80 leading-relaxed font-body">
+              {f.desc}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      {/* About Section */}
+      <section className="py-24 md:py-32 px-6 border-b-2 border-retro-dark" id="about">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+          <div className="flex-1">
+            <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
+              ★ ARCHITECT OF TOMORROW
+            </div>
+            <h2 className="text-4xl md:text-6xl font-display font-black uppercase mb-8 leading-tight">
+              SCALING <br /> <span className="text-retro-yellow text-stroke-dark">YOUR FUTURE.</span>
+            </h2>
+            <div className="h-0.5 w-24 bg-retro-dark mb-8" />
+          </div>
+          <div className="flex-1 retro-card !p-12 relative overflow-hidden group">
+            <Star className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+            <p className="text-lg md:text-xl leading-relaxed text-retro-dark opacity-90 font-body">
+              SkillSync AI is built for developers and students focused on landing high-tier roles. 
+              We bridge the gap between your current skills and company requirements, 
+              engineering a path that merges powerful analysis with breathtaking clarity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact / CTA Section */}
+      <section className="py-24 md:py-32 px-6" id="contact">
+        <div className="max-w-4xl mx-auto text-center retro-card !p-16 !bg-[var(--retro-text)] !text-[var(--retro-bg)] rounded-[4px]">
+          <h2 className="text-3xl md:text-5xl font-display font-black mb-6 uppercase">
+            Let's Build Your <span className="text-retro-yellow">Contact</span>
+          </h2>
+          <p className="text-lg mb-12 opacity-80 font-body">
+            Stop guessing your career path. Get a data-driven strategy to level up your skills today.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
-              { icon: FaEnvelope, label: "Email", href: "mailto:naveenkumarsaro@gmail.com" },
-              { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/itz_me_naveensaro?igsh=MW05cjBzOHUwbnExcg==" },
-              { icon: FaLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/naveen-kumar-s-60b18232a" },
-              { icon: FaGithub, label: "GitHub", href: "https://github.com/NAVEENKumar207" },
+              { icon: FaEnvelope, label: "Email", href: "#" },
+              { icon: FaInstagram, label: "Instagram", href: "#" },
+              { icon: FaLinkedin, label: "LinkedIn", href: "#" },
+              { icon: FaGithub, label: "GitHub", href: "#" },
             ].map((contact, i) => (
-              <motion.a
-                key={contact.label}
+              <a
+                key={i}
                 href={contact.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.1, y: -4 }}
-                className="group relative flex items-center justify-center w-20 h-20 rounded-2xl glass-card transition-all duration-300 lift-3d"
-                style={{ color: isDark ? "#aaaaaa" : "#555555" }}
+                className="group flex items-center justify-center w-16 h-16 border-2 border-[var(--retro-bg)] opacity-20 hover:opacity-100 hover:border-retro-yellow transition-all duration-300 rounded-[4px]"
               >
-                <contact.icon className="text-2xl group-hover:text-white transition-colors duration-300" />
-                <div className="absolute -bottom-10 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold tracking-wide px-3 py-1 rounded" style={{ 
-                  background: isDark ? "#1a1a1a" : "#f0f0f0",
-                  color: isDark ? "#ffffff" : "#0a0a0a",
-                  border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(33,150,243,0.2)"
-                }}>
-                  {contact.label}
-                </div>
-              </motion.a>
+                <contact.icon className="text-2xl text-[var(--retro-bg)] group-hover:text-retro-yellow transition-colors duration-300" />
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Floating Dock */}
-      <motion.div
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 dock-blur rounded-full px-8 py-4 flex items-center gap-8 card-3d"
-        style={{ 
-          border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(33,150,243,0.2)",
-          background: isDark ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.9)"
-        }}
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-      >
-        {[
-          { icon: FaHome, label: "Home", href: "#home" },
-          { icon: FaUser, label: "About", href: "#about" },
-          { icon: FaEnvelope, label: "Contact", href: "#contact" },
-        ].map((item) => (
-          <a key={item.label} href={item.href} className="group relative p-2 transition-opacity duration-300 lift-3d" style={{ color: isDark ? "#555555" : "#aaaaaa" }}>
-            <item.icon className="text-xl group-hover:text-white transition-colors duration-300" />
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold px-3 py-1.5 rounded pointer-events-none" style={{ 
-              background: isDark ? "#111111" : "#ffffff",
-              color: isDark ? "#ffffff" : "#0a0a0a",
-              border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(33,150,243,0.2)"
-            }}>
-              {item.label}
-            </div>
-          </a>
-        ))}
-      </motion.div>
+      {/* Footer */}
+      <footer className="border-t-2 border-retro-dark py-12 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-8 bg-[var(--retro-bg)]">
+        <div className="font-display font-black text-[18px] uppercase tracking-[2px] text-retro-yellow">
+          SkillSync AI
+        </div>
+        <div className="flex flex-wrap justify-center gap-8">
+          {['Privacy', 'Terms', 'Help', 'Career'].map((link) => (
+            <a key={link} href="#" className="text-[11px] font-black uppercase tracking-[1px] opacity-60 text-retro-dark hover:text-retro-yellow transition-colors">
+              {link}
+            </a>
+          ))}
+        </div>
+        <div className="text-[11px] opacity-40 text-retro-dark font-body">
+          © {new Date().getFullYear()} SKILLSYNC AI. ALL RIGHTS RESERVED.
+        </div>
+      </footer>
 
     </div>
   );

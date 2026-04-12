@@ -1,148 +1,68 @@
 
 .roadmap-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #F5F2E8;
+  background-image: 
+    repeating-linear-gradient(#E8E4D8 0px, #E8E4D8 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(90deg, #E8E4D8 0px, #E8E4D8 1px, transparent 1px, transparent 40px);
+  padding: 40px 20px;
 }
 
 .roadmap-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 700px;
+  background: #FFFFFF;
+  border: 2.5px solid #222222;
+  border-radius: 4px;
+  padding: 32px;
+  max-width: 800px;
   width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  animation: slideIn 0.5s ease-out;
+  margin: 0 auto;
+  transition: all 0.15s ease;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.roadmap-card:hover {
+  transform: translateY(-3px);
 }
 
 .roadmap-title {
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 30px;
+  font-family: 'Arial Black', Impact, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #222222;
   font-size: 2.5rem;
-  background: linear-gradient(135deg, #00d4ff, #0099ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 24px;
+  -webkit-text-stroke: 1.5px #222222;
 }
 
 .roadmap-content {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 25px;
-  margin-bottom: 30px;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: #FFFFFF;
+  border: 2px solid #222222;
+  padding: 24px;
+  margin-bottom: 32px;
 }
 
 .roadmap-content p {
-  color: #e0e0e0;
-  line-height: 1.8;
+  color: #555555;
+  font-family: Georgia, serif;
+  line-height: 1.7;
   font-size: 1rem;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
-.roadmap-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.roadmap-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.roadmap-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.4);
-  border-radius: 10px;
-}
-
-.roadmap-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.6);
-}
-
-.roadmap-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.btn-speak,
-.btn-home {
-  padding: 12px 28px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.btn-retro {
+  background: #222222;
+  color: #FFFFFF;
+  font-family: 'Arial Black', sans-serif;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
+  padding: 12px 24px;
+  border: 3px solid #222222;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.btn-speak {
-  background: linear-gradient(135deg, #00d4ff, #0099ff);
-  color: #000;
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-}
-
-.btn-speak:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
-}
-
-.btn-speak:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-home {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-}
-
-.btn-home:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
-}
-
-@media (max-width: 600px) {
-  .roadmap-card {
-    padding: 25px;
-  }
-
-  .roadmap-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-  }
-
-  .roadmap-buttons {
-    flex-direction: column;
-  }
-
-  .btn-speak,
-  .btn-home {
-    width: 100%;
-  }
+.btn-retro:hover {
+  background: #E8C822;
+  color: #222222;
 }

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
@@ -14,11 +15,19 @@ import Analysis from "./pages/Analysis";
 import Roadmap from "./pages/Roadmap";
 import Assistant from "./components/Assistant";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { ThemeProvider } from "./context/ThemeContext";
 import "./styles/theme.css";
 
 function AnimatedRoutes() {
   const location = useLocation();
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
 
   return (
     <AnimatePresence mode="wait">
@@ -44,14 +53,12 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="relative min-h-screen text-white bg-dark overflow-hidden font-sans">
-          <AnimatedRoutes />
-          <Assistant />
-        </div>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <div className="min-h-screen">
+        <AnimatedRoutes />
+        <Assistant />
+      </div>
+    </Router>
   );
 }
 

@@ -1,10 +1,19 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { ThemeContext } from "../context/ThemeContext";
 import { loginUser, saveSession } from "../utils/api";
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +22,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const { isDark } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -32,204 +40,120 @@ function Login() {
     }
   };
 
-  const bg = isDark ? "#0a0a0a" : "#f5f7fa";
-  const text = isDark ? "#ffffff" : "#0a0a0a";
-  const sub = isDark ? "#888" : "#666";
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden font-sans"
-      style={{ backgroundColor: bg }}
-    >
-      <ThemeToggle />
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Decorative Stars */}
+      <Star className="absolute top-20 left-[10%] opacity-70 animate-star" size={28} />
+      <Star className="absolute bottom-20 right-[10%] opacity-60 animate-star" size={32} />
+      <Star className="absolute top-[40%] right-[5%] opacity-40 animate-star" size={22} filled={false} />
 
-      {/* Ambient blobs */}
-      <div className="absolute top-[-15%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)"
-            : "radial-gradient(circle, rgba(33,150,243,0.1) 0%, transparent 70%)"
-        }} />
-      <div className="absolute bottom-[-15%] left-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%)"
-            : "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)"
-        }} />
-
-      {/* Card */}
       <motion.div
-        initial={{ y: 40, opacity: 0 }}
+        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="relative z-10 w-full max-w-md mx-4"
-        style={{
-          background: isDark ? "rgba(255,255,255,0.04)" : "#ffffff",
-          border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
-          borderRadius: "2rem",
-          padding: "3rem",
-          backdropFilter: "blur(20px)",
-          boxShadow: isDark ? "0 24px 60px rgba(0,0,0,0.6)" : "0 24px 60px rgba(0,0,0,0.08)"
-        }}
+        className="w-full max-w-[420px] relative z-10"
       >
-        {/* Header */}
-        <motion.div initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.1)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}` }}>
-            <span className="text-2xl">⚡</span>
+        <div className="retro-card !p-10 md:!p-12 shadow-none">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl md:text-4xl font-display font-black uppercase mb-2 text-retro-dark">
+              Login
+            </h1>
+            <p className="text-sm font-body text-retro-dark opacity-80">
+              Welcome back to SkillSync AI
+            </p>
           </div>
-          <h1 className="text-3xl font-black tracking-tight mb-1" style={{ color: text }}>
-            Welcome Back
-          </h1>
-          <p className="text-sm font-medium" style={{ color: sub }}>
-            Sign in to SkillSync AI
-          </p>
-        </motion.div>
 
-        {/* Error Banner */}
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -8, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -8, height: 0 }}
-              className="mb-4 px-4 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ color: "#ef4444", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
-            >
-              {error}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Success Banner */}
-        <AnimatePresence>
-          {success && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="mb-4 px-4 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ color: "#22c55e", background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)" }}
-            >
-              ✓ Access granted — redirecting...
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
-            <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              style={{
-                width: "100%", padding: "14px 16px", borderRadius: "12px",
-                background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-                border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-                color: text, fontSize: "0.95rem", outline: "none"
-              }}
-              onFocus={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.3)" : "#2196F3"}
-              onBlur={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
-            />
-          </motion.div>
-
-          {/* Password */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.35 }}>
-            <div className="flex justify-between items-center mb-1.5">
-              <label className="text-xs font-bold tracking-wide uppercase" style={{ color: sub }}>
-                Password
-              </label>
-              <Link
-                to="/forgot-password"
-                className="text-xs font-semibold transition-colors"
-                style={{ color: isDark ? "#aaa" : "#2196F3" }}
-                onMouseEnter={e => e.target.style.color = isDark ? "#fff" : "#1565C0"}
-                onMouseLeave={e => e.target.style.color = isDark ? "#aaa" : "#2196F3"}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-6 p-4 border-2 border-retro-dark bg-retro-dark text-retro-yellow text-[11px] font-black uppercase tracking-[1.5px] text-center"
               >
-                Forgot password?
-              </Link>
-            </div>
-            <div className="relative">
+                {error}
+              </motion.div>
+            )}
+            {success && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mb-6 p-4 border-2 border-retro-dark bg-retro-yellow text-retro-dark text-[11px] font-black uppercase tracking-[1.5px] text-center"
+              >
+                ✓ Access granted — redirecting...
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="retro-label">Email Address</label>
               <input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="email"
+                placeholder="YOU@EXAMPLE.COM"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                autoComplete="current-password"
-                style={{
-                  width: "100%", padding: "14px 16px", paddingRight: "48px", borderRadius: "12px",
-                  background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-                  border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-                  color: text, fontSize: "0.95rem", outline: "none"
-                }}
-                onFocus={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.3)" : "#2196F3"}
-                onBlur={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
+                className="retro-input uppercase placeholder:opacity-50"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
-                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
             </div>
-          </motion.div>
 
-          {/* Submit */}
-          <motion.button
-            initial={{ y: 16, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={loading || success}
-            className="w-full py-4 rounded-xl font-bold tracking-wide transition-all duration-200 mt-2"
-            style={{
-              background: success ? "rgba(34,197,94,0.15)"
-                : loading ? (isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)")
-                  : (isDark ? "#ffffff" : "#2196F3"),
-              color: success ? "#22c55e"
-                : loading ? sub
-                  : (isDark ? "#0a0a0a" : "#ffffff"),
-              border: "none",
-              cursor: loading || success ? "not-allowed" : "pointer",
-              fontSize: "0.95rem"
-            }}
-          >
-            {loading ? "Signing in…" : success ? "✓ Access Granted" : "Sign In"}
-          </motion.button>
-        </form>
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="retro-label !mb-0">Password</label>
+                <Link
+                  to="/forgot-password"
+                  className="text-[10px] font-black uppercase tracking-wider text-retro-dark opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  Forgot?
+                </Link>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="retro-input pr-12 placeholder:opacity-50"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-retro-dark opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                </button>
+              </div>
+            </div>
 
-        {/* Footer */}
-        <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          className="text-center text-sm mt-6"
-          style={{ color: sub }}
-        >
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className="font-bold transition-colors"
-            style={{ color: isDark ? "#ffffff" : "#2196F3" }}
-          >
-            Create one
+            <button
+              type="submit"
+              disabled={loading || success}
+              className="retro-btn-primary w-full mt-4 flex justify-center items-center"
+            >
+              {loading ? "PROCESSING..." : success ? "SUCCESS" : "SIGN IN"}
+            </button>
+          </form>
+
+          <p className="text-center text-[12px] mt-8 text-retro-dark font-body opacity-90">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-black text-retro-dark hover:underline underline-offset-4"
+            >
+              SIGN UP
+            </Link>
+          </p>
+        </div>
+        
+        {/* Back to Home Link */}
+        <div className="text-center mt-8">
+          <Link to="/" className="text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-70 hover:opacity-100 transition-opacity">
+            ← Back to Home
           </Link>
-        </motion.p>
+        </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 

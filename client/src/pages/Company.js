@@ -1,9 +1,18 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaSearch, FaArrowRight } from "react-icons/fa";
-import { ThemeToggle } from '../components/ThemeToggle';
-import { ThemeContext } from '../context/ThemeContext';
+import { FaSearch, FaArrowRight, FaArrowLeft } from "react-icons/fa";
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 const companies = [
   { id: 1, name: 'Google', description: "Organize the world's information and make it universally accessible.", logo: 'G' },
@@ -16,7 +25,6 @@ const companies = [
 
 const Company = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { isDark } = useContext(ThemeContext);
   const navigate = useNavigate();
   const filteredCompanies = companies.filter(company =>
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -27,135 +35,81 @@ const Company = () => {
     navigate('/role');
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
-  };
-
   return (
-    <div className="min-h-screen overflow-hidden relative font-sans" style={{
-      backgroundColor: isDark ? "#0a0a0a" : "#ffffff",
-      color: isDark ? "#ffffff" : "#0a0a0a"
-    }}>
-      <ThemeToggle />
+    <div className="min-h-screen text-retro-dark font-body selection:bg-retro-yellow selection:text-retro-dark relative overflow-x-hidden p-6 py-12 transition-colors duration-300">
+      <Star className="absolute top-10 left-[10%] opacity-70 animate-star" size={28} />
+      <Star className="absolute bottom-10 right-[10%] opacity-60 animate-star" size={32} />
 
-      {/* 3D Ambient Lights */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full pointer-events-none animate-blob-float" style={{
-        background: isDark
-          ? "radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 70%)"
-          : "radial-gradient(circle, rgba(33,150,243,0.08) 0%, transparent 70%)"
-      }}></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full pointer-events-none animate-blob-float" style={{
-        background: isDark
-          ? "radial-gradient(circle, rgba(255,255,255,0.015) 0%, transparent 70%)"
-          : "radial-gradient(circle, rgba(33,150,243,0.05) 0%, transparent 70%)",
-        animationDelay: "5s"
-      }}></div>
+      <div className="max-w-6xl mx-auto relative z-10">
+        <Link to="/upload" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
+          <FaArrowLeft size={10} /> Back to Upload
+        </Link>
 
-      <div className="container mx-auto px-6 py-32 relative z-10 max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: -30, rotateX: 10 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-20"
-          style={{ transformPerspective: 1000 }}
-        >
-          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight neon-glow" style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}>
-            Select Destination
+        <div className="text-center mb-16">
+          <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
+            ★ STEP 02: TARGET
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-black uppercase mb-4 text-retro-dark leading-none">
+            Select <span className="text-retro-yellow text-stroke-dark">Destination</span>
           </h1>
-          <p className="text-xl max-w-2xl mx-auto font-medium leading-relaxed" style={{ color: isDark ? "#aaaaaa" : "#555555" }}>
-            Target a specific tech giant to configure the preparation neural engines.
+          <p className="text-sm md:text-base text-retro-dark opacity-80 max-w-xl mx-auto leading-relaxed">
+            Target a specific tech giant to configure the preparation engines for their specific interview standards.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="max-w-3xl mx-auto mb-24 relative card-3d"
-        >
-          <div className="relative flex items-center glass-card rounded-full px-8 py-5 transition-all duration-300 focus-within:border-white/20">
-            <FaSearch className="text-xl mr-5" style={{ color: isDark ? "#444444" : "#aaaaaa" }} />
+        <div className="max-w-2xl mx-auto mb-16">
+          <div className="relative">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-retro-dark opacity-50" />
             <input
               type="text"
-              placeholder="Search organizations..."
-              className="bg-transparent w-full text-xl font-bold focus:outline-none"
-              style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}
+              placeholder="SEARCH ORGANIZATIONS..."
+              className="retro-input !pl-12 uppercase placeholder:opacity-30"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCompanies.map((company) => (
             <motion.div
               key={company.id}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -6 }}
-              className="relative group h-full cursor-pointer card-3d"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               onClick={() => handleSelect(company)}
+              className="retro-card !p-10 cursor-pointer group flex flex-col h-full hover:bg-[var(--retro-card-bg)]"
             >
-              <div
-                className="relative h-full flex flex-col glass-card rounded-[2rem] p-10 transition-all duration-500 lift-3d"
-                style={{
-                  borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.15)",
-                  background: isDark ? "rgba(255,255,255,0.03)" : "rgba(33,150,243,0.05)"
-                }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.2)" : "rgba(33,150,243,0.3)"}
-                onMouseLeave={e => e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.15)"}
-              >
-                <div
-                  className="w-20 h-20 rounded-[1.2rem] flex items-center justify-center text-3xl font-bold mb-8 transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(33,150,243,0.1)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(33,150,243,0.2)"
-                  }}
-                >
-                  <span style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}>{company.logo}</span>
-                </div>
+              <div className="w-16 h-16 border-2 border-retro-dark flex items-center justify-center text-3xl font-display font-black mb-8 bg-retro-yellow text-black shadow-[4px_4px_0px_var(--retro-text)] group-hover:shadow-none group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all">
+                {company.logo}
+              </div>
 
-                <h3 className="text-3xl font-extrabold mb-4 tracking-tight" style={{ color: isDark ? "#ffffff" : "#0a0a0a" }}>
-                  {company.name}
-                </h3>
+              <h3 className="text-2xl font-display font-black uppercase mb-4 text-retro-dark">
+                {company.name}
+              </h3>
 
-                <p className="mb-10 flex-grow leading-relaxed font-medium text-lg" style={{ color: isDark ? "#aaaaaa" : "#555555" }}>
-                  {company.description}
-                </p>
+              <p className="text-sm text-retro-dark opacity-80 leading-relaxed font-body mb-8 flex-grow">
+                {company.description}
+              </p>
 
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center self-end transition-all duration-300"
-                  style={{
-                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(33,150,243,0.1)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(33,150,243,0.2)"
-                  }}
-                >
-                  <FaArrowRight style={{ color: isDark ? "#555555" : "#aaaaaa" }} className="group-hover:text-white transition-colors" />
+              <div className="flex items-center justify-between mt-auto">
+                <span className="text-[10px] font-black tracking-widest text-retro-dark uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                  SELECT TARGET →
+                </span>
+                <div className="w-10 h-10 border-2 border-retro-dark flex items-center justify-center group-hover:bg-[var(--retro-text)] group-hover:text-[var(--retro-bg)] transition-colors">
+                  <FaArrowRight size={14} />
                 </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         {filteredCompanies.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center mt-20 text-2xl font-medium"
-            style={{ color: isDark ? "#555555" : "#aaaaaa" }}
-          >
-            No matching entities discovered for <span style={{ color: isDark ? "#ffffff" : "#0a0a0a" }} className="font-bold">"{searchTerm}"</span>
-          </motion.div>
+          <div className="text-center py-20">
+            <div className="text-4xl mb-4">🛸</div>
+            <p className="font-display font-black uppercase text-retro-dark opacity-40 tracking-widest">
+              No entities discovered for "{searchTerm}"
+            </p>
+          </div>
         )}
       </div>
     </div>

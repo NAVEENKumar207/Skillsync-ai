@@ -1,9 +1,18 @@
-import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaCode, FaServer, FaChartBar, FaShieldAlt, FaMobileAlt, FaArrowRight } from "react-icons/fa";
-import { ThemeToggle } from '../components/ThemeToggle';
-import { ThemeContext } from '../context/ThemeContext';
+import { FaCode, FaServer, FaChartBar, FaShieldAlt, FaMobileAlt, FaArrowRight, FaArrowLeft } from "react-icons/fa";
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 const roles = [
   { id: 'frontend', name: 'Frontend Engineer', icon: <FaCode />, description: "Building high-performance, accessible, and beautiful user interfaces." },
@@ -15,81 +24,70 @@ const roles = [
 ];
 
 const Role = () => {
-  const { isDark } = useContext(ThemeContext);
   const navigate = useNavigate();
-  const selectedCompany = localStorage.getItem('selectedCompany') || 'Company';
+  const selectedCompany = localStorage.getItem('selectedCompany') || 'COMPANY';
 
   const handleSelect = (roleName) => {
     localStorage.setItem('selectedRole', roleName);
     navigate('/analysis');
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
-
   return (
-    <div className="min-h-screen relative font-sans" style={{
-      backgroundColor: isDark ? "#0a0a0a" : "#ffffff",
-      color: isDark ? "#ffffff" : "#0a0a0a"
-    }}>
-      <ThemeToggle />
+    <div className="min-h-screen text-retro-dark font-body selection:bg-retro-yellow selection:text-retro-dark relative overflow-x-hidden p-6 py-12 transition-colors duration-300">
+      <Star className="absolute top-10 right-[10%] opacity-70 animate-star" size={28} />
+      <Star className="absolute bottom-10 left-[10%] opacity-60 animate-star" size={32} />
 
-      <div className="container mx-auto px-6 py-32 relative z-10 max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-block px-4 py-1.5 rounded-full mb-4 text-sm font-bold uppercase tracking-widest"
-               style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.1)", color: isDark ? "#888" : "#2196F3" }}>
-            Step 3: Define Your Path
+      <div className="max-w-6xl mx-auto relative z-10">
+        <Link to="/company" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
+          <FaArrowLeft size={10} /> Back to Company
+        </Link>
+
+        <div className="text-center mb-16">
+          <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
+            ★ STEP 03: DEFINE
           </div>
-          <h1 className="text-5xl font-black mb-4 tracking-tight">
-            What's your role at <span style={{ color: isDark ? "#00ffff" : "#2196F3" }}>{selectedCompany}</span>?
+          <h1 className="text-4xl md:text-6xl font-display font-black uppercase mb-4 text-retro-dark leading-none">
+            WHAT'S YOUR ROLE AT <br />
+            <span className="text-retro-yellow text-stroke-dark">{selectedCompany.toUpperCase()}</span>?
           </h1>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: isDark ? "#aaaaaa" : "#555555" }}>
+          <p className="text-sm md:text-base text-retro-dark opacity-80 max-w-xl mx-auto leading-relaxed">
             We'll customize your roadmap based on the specific engineering requirements of this role.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {roles.map((role) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {roles.map((role, i) => (
             <motion.div
               key={role.id}
-              variants={itemVariants}
-              whileHover={{ y: -5, scale: 1.02 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
               onClick={() => handleSelect(role.name)}
-              className="cursor-pointer p-8 rounded-3xl border transition-all duration-300 group"
-              style={{
-                background: isDark ? "rgba(255,255,255,0.03)" : "rgba(33,150,243,0.03)",
-                borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.15)"
-              }}
+              className="retro-card !p-10 cursor-pointer group flex flex-col h-full hover:bg-[var(--retro-card-bg)]"
             >
-              <div className="text-3xl mb-6 transition-transform group-hover:scale-110" style={{ color: isDark ? "#ffffff" : "#2196F3" }}>
+              <div className="text-4xl text-retro-dark mb-8 group-hover:scale-110 group-hover:text-retro-yellow transition-all duration-300">
                 {role.icon}
               </div>
-              <h3 className="text-2xl font-bold mb-3">{role.name}</h3>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: isDark ? "#888" : "#666" }}>
+              
+              <h3 className="text-2xl font-display font-black uppercase mb-4 text-retro-dark leading-tight">
+                {role.name}
+              </h3>
+              
+              <p className="text-sm text-retro-dark opacity-80 leading-relaxed font-body mb-8 flex-grow">
                 {role.description}
               </p>
-              <div className="flex items-center gap-2 text-sm font-bold transition-all group-hover:translate-x-2" style={{ color: isDark ? "#ffffff" : "#2196F3" }}>
-                Select Role <FaArrowRight className="text-xs" />
+              
+              <div className="flex items-center justify-between mt-auto">
+                <span className="text-[10px] font-black tracking-widest text-retro-dark uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                  SELECT ROLE →
+                </span>
+                <div className="w-10 h-10 border-2 border-retro-dark flex items-center justify-center group-hover:bg-[var(--retro-text)] group-hover:text-[var(--retro-bg)] transition-colors">
+                  <FaArrowRight size={14} />
+                </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

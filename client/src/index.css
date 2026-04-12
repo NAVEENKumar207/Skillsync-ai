@@ -1,99 +1,136 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-    font-family: 'Inter', sans-serif;
+  * {
+    box-sizing: border-box;
   }
 
-  body {
-    background-color: #0a0a0a;
-    color: #ffffff;
+  :root {
+    --retro-bg: #F5F2E8;
+    --retro-grid: #E8E4D8;
+    --retro-text: #222222;
+    --retro-yellow: #E8C822;
+    --retro-card-bg: #ffffff;
+    --retro-muted: #666666;
+  }
+
+  .dark {
+    --retro-bg: #1a1a1a;
+    --retro-grid: rgba(255, 255, 255, 0.04);
+    --retro-text: #F5F2E8;
+    --retro-yellow: #E8C822;
+    --retro-card-bg: #262626;
+    --retro-muted: #aaaaaa;
+  }
+
+  body, #root {
+    background-color: var(--retro-bg);
+    background-image: 
+      linear-gradient(var(--retro-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--retro-grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--retro-text);
+    font-family: Georgia, serif;
+    min-height: 100vh;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Solid background for taskbars to hide grid */
+  .retro-nav {
+    background-color: var(--retro-bg) !important;
+    background-image: none !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--retro-text);
+  }
+
+  a {
+    color: var(--retro-text);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.15s ease;
+  }
+
+  a:hover {
+    color: #222222;
+    border-bottom: 2px solid #E8C822;
   }
 }
 
-/* ========== Studio Utilities ========== */
 @layer utilities {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  .retro-btn-primary {
+    @apply bg-[var(--retro-text)] text-[var(--retro-bg)] font-display font-black text-[13px] tracking-[2px] uppercase py-4 px-9 border-[3px] border-[var(--retro-text)] rounded-none cursor-pointer transition-all duration-150;
+  }
+  .retro-btn-primary:hover {
+    @apply bg-retro-yellow text-black border-[var(--retro-text)];
   }
 
-  .text-gradient {
-    background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .retro-btn-secondary {
+    @apply bg-transparent text-[var(--retro-text)] font-black text-[11px] tracking-[1px] uppercase py-1.5 px-3.5 border-2 border-[var(--retro-text)] rounded-[2px] transition-all duration-150;
+  }
+  .retro-btn-secondary:hover {
+    @apply bg-[var(--retro-text)] text-[var(--retro-bg)];
   }
 
-  .dock-blur {
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+  .retro-card {
+    @apply bg-[var(--retro-card-bg)] border-retro border-[var(--retro-text)] rounded-[4px] p-5 md:p-6 transition-all duration-150;
+  }
+  .retro-card:hover {
+    @apply -translate-y-[3px];
   }
 
-  .studio-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    border-radius: 12px;
-    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  .retro-card-dark {
+    @apply bg-[var(--retro-text)] text-[var(--retro-bg)] border-retro border-[var(--retro-text)] rounded-[4px] p-5 md:p-6 transition-all duration-150;
   }
 
-  .studio-btn:hover {
-    background: #ffffff;
-    color: #0a0a0a;
-    border-color: #ffffff;
+  .retro-card-yellow {
+    @apply bg-retro-yellow text-black border-retro border-[var(--retro-text)] rounded-[4px] p-4 md:p-5 font-black transition-all duration-150;
   }
 
-  .studio-input {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-radius: 12px;
-    transition: border-color 0.3s ease;
-    width: 100%;
-    padding: 16px;
-    font-size: 0.875rem;
-    outline: none;
+  .retro-input {
+    @apply bg-[var(--retro-card-bg)] border-2 border-[var(--retro-text)] rounded-[4px] py-3 px-4 text-sm font-body text-[var(--retro-text)] outline-none w-full transition-all duration-150;
+  }
+  .retro-input:focus {
+    @apply border-retro-yellow ring-[3px] ring-retro-yellow ring-opacity-30;
   }
 
-  .studio-input::placeholder {
-    color: #555555;
+  .retro-label {
+    @apply font-label font-black text-[11px] uppercase tracking-[2px] text-[var(--retro-text)] mb-1.5 block;
   }
 
-  .studio-input:focus {
-    border-color: rgba(255, 255, 255, 0.3);
+  .retro-badge {
+    @apply bg-[var(--retro-text)] text-retro-yellow text-[9px] font-black tracking-[2px] uppercase py-0.5 px-2 rounded-[2px] inline-block mb-1.5;
+  }
+
+  .retro-badge-yellow {
+    @apply bg-retro-yellow text-black text-[9px] font-black tracking-[2px] uppercase py-0.5 px-2 rounded-[2px] inline-block mb-1.5;
+  }
+
+  .text-outline-yellow {
+    color: #E8C822;
+    -webkit-text-stroke: 2px var(--retro-text);
   }
 }
 
-/* ========== Selection & Scrollbar ========== */
 ::selection {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  background: #E8C822;
+  color: #222222;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F5F2E8; }
+::-webkit-scrollbar-thumb { background: #222222; border-radius: 0px; }
+::-webkit-scrollbar-thumb:hover { background: #E8C822; }
 
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #222222;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+.marquee-inner {
+  display: inline-block;
+  animation: marquee 14s linear infinite;
 }

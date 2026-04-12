@@ -1,10 +1,19 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { ThemeContext } from "../context/ThemeContext";
 import { registerUser, saveSession } from "../utils/api";
+
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
 
 const getStrength = (pwd) => {
   let s = 0;
@@ -12,10 +21,9 @@ const getStrength = (pwd) => {
   if (/[A-Z]/.test(pwd)) s++;
   if (/[0-9]/.test(pwd)) s++;
   if (/[^A-Za-z0-9]/.test(pwd)) s++;
-  if (s <= 1) return { label: "Weak", color: "#ef4444", pct: 25 };
-  if (s <= 3) return { label: "Medium", color: "#eab308", pct: 60 };
-  return { label: "Strong", color: "#22c55e", pct: 100 };
-};
+  if (s <= 1) return { label: "Weak", color: "var(--retro-text)", pct: 25 };
+  if (s <= 3) return { label: "Medium", color: "var(--retro-text)", pct: 60 };
+  return { label: "Strong", color: "var(--retro-text)", pct: 100 };};
 
 function Signup() {
   const [name, setName] = useState("");
@@ -26,7 +34,6 @@ function Signup() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { isDark } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const strength = getStrength(pwd);
@@ -48,173 +55,155 @@ function Signup() {
     }
   };
 
-  const bg = isDark ? "#0a0a0a" : "#f5f7fa";
-  const text = isDark ? "#ffffff" : "#0a0a0a";
-  const sub = isDark ? "#888" : "#666";
-
-  const inputStyle = {
-    width: "100%", padding: "14px 16px", paddingRight: "48px", borderRadius: "12px",
-    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-    color: text, fontSize: "0.95rem", outline: "none"
-  };
-
-  const onFocus = (e) => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.3)" : "#2196F3";
-  const onBlur = (e) => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden font-sans py-12"
-      style={{ backgroundColor: bg }}
-    >
-      <ThemeToggle />
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden py-12">
+      {/* Decorative Stars */}
+      <Star className="absolute top-10 right-[15%] opacity-70 animate-star" size={28} />
+      <Star className="absolute bottom-10 left-[15%] opacity-60 animate-star" size={32} />
+      <Star className="absolute top-1/2 left-[5%] opacity-40 animate-star" size={22} filled={false} />
 
-      {/* Blobs */}
-      <div className="absolute bottom-[-15%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: isDark ? "radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)" : "radial-gradient(circle, rgba(33,150,243,0.1) 0%, transparent 70%)" }} />
-      <div className="absolute top-[-15%] left-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: isDark ? "radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%)" : "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }} />
-
-      {/* Card */}
       <motion.div
-        initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="relative z-10 w-full max-w-md mx-4"
-        style={{
-          background: isDark ? "rgba(255,255,255,0.04)" : "#ffffff",
-          border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
-          borderRadius: "2rem", padding: "3rem",
-          backdropFilter: "blur(20px)",
-          boxShadow: isDark ? "0 24px 60px rgba(0,0,0,0.6)" : "0 24px 60px rgba(0,0,0,0.08)"
-        }}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-[420px] relative z-10"
       >
-        {/* Header */}
-        <motion.div initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.1)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}` }}>
-            <span className="text-2xl">🚀</span>
+        <div className="retro-card !p-10 md:!p-12 shadow-none">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-display font-black uppercase mb-2 text-retro-dark">
+              Sign Up
+            </h1>
+            <p className="text-sm font-body text-retro-dark opacity-80">
+              Join SkillSync AI — it's free
+            </p>
           </div>
-          <h1 className="text-3xl font-black tracking-tight mb-1" style={{ color: text }}>
-            Create Account
-          </h1>
-          <p className="text-sm font-medium" style={{ color: sub }}>
-            Join SkillSync AI — it's free
-          </p>
-        </motion.div>
 
-        {/* Error */}
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mb-4 px-4 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ color: "#ef4444", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
-            >
-              {error}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.25 }}>
-            <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Full Name</label>
-            <input type="text" placeholder="NK" value={name} onChange={e => setName(e.target.value)}
-              required autoComplete="name" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-          </motion.div>
-
-          {/* Email */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
-            <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Email</label>
-            <input type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)}
-              required autoComplete="email" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-          </motion.div>
-
-          {/* Password */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.35 }}>
-            <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Password</label>
-            <div className="relative">
-              <input type={showPassword ? "text" : "password"} placeholder="Min 6 characters" value={pwd} onChange={e => setPwd(e.target.value)}
-                required autoComplete="new-password" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
-                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-6 p-4 border-2 border-retro-dark bg-retro-dark text-retro-yellow text-[11px] font-black uppercase tracking-[1.5px] text-center"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="retro-label">Full Name</label>
+              <input
+                type="text"
+                placeholder="YOUR NAME"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="retro-input uppercase placeholder:opacity-50"
+              />
             </div>
-            {pwd && (
-              <div className="mt-2">
-                <div className="flex justify-between text-xs mb-1" style={{ color: sub }}>
-                  <span>Strength</span>
-                  <span style={{ color: strength.color, fontWeight: 700 }}>{strength.label}</span>
-                </div>
-                <div style={{ height: 4, borderRadius: 4, background: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }}>
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${strength.pct}%` }}
-                    transition={{ duration: 0.4 }}
-                    style={{ height: "100%", borderRadius: 4, background: strength.color }}
-                  />
-                </div>
+
+            <div>
+              <label className="retro-label">Email Address</label>
+              <input
+                type="email"
+                placeholder="YOU@EXAMPLE.COM"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="retro-input uppercase placeholder:opacity-50"
+              />
+            </div>
+
+            <div>
+              <label className="retro-label">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="MIN 6 CHARACTERS"
+                  value={pwd}
+                  onChange={(e) => setPwd(e.target.value)}
+                  required
+                  className="retro-input placeholder:opacity-50"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-retro-dark opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                </button>
               </div>
-            )}
-          </motion.div>
-
-          {/* Confirm Password */}
-          <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
-            <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Confirm Password</label>
-            <div className="relative">
-              <input type={showConfirm ? "text" : "password"} placeholder="Repeat password" value={confirm} onChange={e => setConfirm(e.target.value)}
-                required autoComplete="new-password"
-                style={{ ...inputStyle, borderColor: pwdMismatch ? "#ef4444" : pwdMatch ? "#22c55e" : (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)") }}
-                onFocus={onFocus} onBlur={onBlur} />
-              <button type="button" onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
-                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
-              >
-                {showConfirm ? <FaEyeSlash /> : <FaEye />}
-              </button>
+              {pwd && (
+                <div className="mt-3">
+                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest mb-1.5 text-retro-dark">
+                    <span>Strength</span>
+                    <span className="text-retro-dark">{strength.label}</span>
+                  </div>
+                  <div className="h-2 bg-retro-grid border-[1px] border-retro-dark">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${strength.pct}%` }}
+                      className="h-full bg-retro-yellow border-r-[1px] border-retro-dark"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            {confirm && (
-              <p className="text-xs mt-1.5 font-semibold" style={{ color: pwdMatch ? "#22c55e" : "#ef4444" }}>
-                {pwdMatch ? "✓ Passwords match" : "✗ Passwords don't match"}
-              </p>
-            )}
-          </motion.div>
 
-          {/* Submit */}
-          <motion.button
-            initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.45 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={loading || !!pwdMismatch}
-            className="w-full py-4 rounded-xl font-bold tracking-wide transition-all duration-200 mt-2"
-            style={{
-              background: loading ? (isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)") : (isDark ? "#ffffff" : "#2196F3"),
-              color: loading ? sub : (isDark ? "#0a0a0a" : "#ffffff"),
-              border: "none",
-              cursor: loading || !!pwdMismatch ? "not-allowed" : "pointer",
-              opacity: !!pwdMismatch ? 0.5 : 1,
-              fontSize: "0.95rem"
-            }}
-          >
-            {loading ? "Creating Account…" : "Create Account"}
-          </motion.button>
-        </form>
+            <div>
+              <label className="retro-label">Confirm Password</label>
+              <div className="relative">
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  placeholder="REPEAT PASSWORD"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  required
+                  className={`retro-input placeholder:opacity-50 ${pwdMismatch ? "border-retro-dark bg-retro-dark/5" : ""}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-retro-dark opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  {showConfirm ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                </button>
+              </div>
+              {confirm && (
+                <p className={`text-[10px] mt-2 font-black uppercase tracking-widest ${pwdMatch ? "text-retro-dark" : "text-retro-dark opacity-70"}`}>
+                  {pwdMatch ? "✓ MATCH" : "✗ MISMATCH"}
+                </p>
+              )}
+            </div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          className="text-center text-sm mt-6" style={{ color: sub }}>
-          Already have an account?{" "}
-          <Link to="/login" className="font-bold" style={{ color: isDark ? "#ffffff" : "#2196F3" }}>
-            Sign in
+            <button
+              type="submit"
+              disabled={loading || !!pwdMismatch}
+              className="retro-btn-primary w-full mt-4 flex justify-center items-center"
+            >
+              {loading ? "CREATING ACCOUNT…" : "CREATE ACCOUNT"}
+            </button>
+          </form>
+
+          <p className="text-center text-[12px] mt-8 text-retro-dark font-body opacity-90">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-black text-retro-dark hover:underline underline-offset-4"
+            >
+              LOG IN
+            </Link>
+          </p>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link to="/" className="text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-70 hover:opacity-100 transition-opacity">
+            ← Back to Home
           </Link>
-        </motion.p>
+        </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 

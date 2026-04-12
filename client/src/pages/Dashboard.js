@@ -1,18 +1,40 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
     FaUpload, FaBuilding, FaChartLine, FaRoute, FaSignOutAlt,
-    FaStar, FaSync
+    FaSync, FaSun, FaMoon
 } from "react-icons/fa";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { ThemeContext } from "../context/ThemeContext";
 import { getUser, clearSession } from "../utils/api";
 
+const Star = ({ className, filled = true, size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
+    <polygon 
+      points="14,2 17,11 26,11 19,17 22,26 14,20 6,26 9,17 2,11 11,11" 
+      fill={filled ? "#E8C822" : "none"} 
+      stroke="var(--retro-text)" 
+      strokeWidth={filled ? "1.5" : "2"}
+    />
+  </svg>
+);
+
 function Dashboard() {
-    const { isDark } = useContext(ThemeContext);
+    const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
     const navigate = useNavigate();
     const user = getUser();
+
+    useEffect(() => {
+        if (isDark) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }, [isDark]);
+
+    const toggleTheme = () => setIsDark(!isDark);
+
     const hasResume = !!localStorage.getItem("resumeText");
     const hasRoadmap = !!localStorage.getItem("aiRoadmap");
     const selectedCompany = localStorage.getItem("selectedCompany");
@@ -28,210 +50,169 @@ function Dashboard() {
             localStorage.removeItem("selectedCompany");
             localStorage.removeItem("selectedRole");
             localStorage.removeItem("aiRoadmap");
-            window.location.reload(); // Refresh to update UI state or navigate
+            window.location.reload();
             navigate("/upload");
         }
     };
-
-    const bg = isDark ? "#0a0a0a" : "#f5f7fa";
-    const textPrimary = isDark ? "#ffffff" : "#0a0a0a";
-    const textMuted = isDark ? "#aaaaaa" : "#666666";
-    const cardBg = isDark ? "rgba(255,255,255,0.04)" : "#ffffff";
-    const cardBorder = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
 
     const steps = [
         {
             icon: FaUpload, label: "Upload Resume", path: "/upload",
             desc: "Upload or paste your resume for AI analysis.",
-            done: hasResume, color: "#2196F3",
+            done: hasResume, num: "01"
         },
         {
-            icon: FaBuilding, label: "Select Company and job role", path: "/company",
+            icon: FaBuilding, label: "Select Company", path: "/company",
             desc: "Pick a target company and specific job role.",
-            done: !!selectedCompany, color: "#8b5cf6",
+            done: !!selectedCompany, num: "02",
             disabled: !hasResume,
         },
         {
             icon: FaChartLine, label: "Skill Analysis", path: "/analysis",
             desc: "Get your AI-powered skill gap analysis.",
-            done: hasRoadmap, color: "#f59e0b",
+            done: hasRoadmap, num: "03",
             disabled: !hasResume,
         },
         {
             icon: FaRoute, label: "View Roadmap", path: "/roadmap",
             desc: "View your personalized 3-month learning plan.",
-            done: false, color: "#22c55e",
+            done: false, num: "04",
             disabled: !hasRoadmap,
         },
     ];
 
-    const firstName = user?.name?.split(" ")[0] || "there";
+    const firstName = user?.name?.split(" ")[0] || "THERE";
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen font-sans"
-            style={{ backgroundColor: bg, color: textPrimary }}
-        >
-            <ThemeToggle />
-
-            {/* Ambient */}
-            <div className="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none opacity-40"
-                style={{ background: isDark ? "radial-gradient(circle, rgba(33,150,243,0.12) 0%, transparent 70%)" : "radial-gradient(circle, rgba(33,150,243,0.08) 0%, transparent 70%)" }} />
-            <div className="fixed bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none opacity-30"
-                style={{ background: isDark ? "radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)" : "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }} />
-
-            <div className="max-w-6xl mx-auto px-6 py-12">
-                {/* Top Bar */}
-                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-between mb-16">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg"
-                            style={{ background: isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.12)", color: isDark ? "#ffffff" : "#2196F3", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}` }}>
-                            {user?.name?.[0]?.toUpperCase() || "U"}
-                        </div>
-                        <div>
-                            <p className="text-sm font-medium" style={{ color: textMuted }}>Welcome back</p>
-                            <h2 className="text-xl font-black" style={{ color: textPrimary }}>{user?.name || "User"}</h2>
-                        </div>
+        <div className="min-h-screen text-retro-dark font-body selection:bg-retro-yellow selection:text-retro-dark relative overflow-x-hidden pb-20 transition-colors duration-300">
+            {/* Nav Bar */}
+            <nav className="border-b-2 border-retro-dark px-6 py-4 flex items-center justify-between sticky top-0 retro-nav z-50">
+                <Link to="/" className="flex items-center gap-2 group">
+                    <div className="border-retro-yellow border-[2.5px] px-2.5 py-1 transition-colors duration-200 group-hover:bg-retro-dark">
+                        <span className="font-display font-black text-[15px] uppercase tracking-[2px] transition-colors duration-200 group-hover:text-white">
+                            SkillSync AI
+                        </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={handleReset}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all"
-                            style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.1)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}`, color: isDark ? "#ffffff" : "#2196F3" }}
-                        >
-                            <FaSync /> Reset Process
-                        </button>
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all"
-                            style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444" }}
-                        >
-                            <FaSignOutAlt /> Sign Out
-                        </button>
-                    </div>
-                </motion.div>
+                </Link>
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={toggleTheme}
+                        className="p-2 border-2 border-retro-dark rounded-[4px] hover:bg-retro-yellow transition-colors"
+                        title="Toggle Theme"
+                    >
+                        {isDark ? <FaSun className="text-retro-yellow" /> : <FaMoon />}
+                    </button>
+                    <button onClick={handleReset} className="retro-btn-secondary !py-1.5 !px-3 hidden md:flex items-center gap-2">
+                        <FaSync size={12} /> <span className="text-[10px]">RESET</span>
+                    </button>
+                    <button onClick={handleLogout} className="retro-btn-secondary !py-1.5 !px-3 flex items-center gap-2">
+                        <FaSignOutAlt size={12} /> <span className="text-[10px]">LOGOUT</span>
+                    </button>
+                </div>
+            </nav>
 
+            <div className="max-w-6xl mx-auto px-6 py-12 md:py-20">
                 {/* Hero */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                    className="mb-12">
-                    <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tight">
-                        Hey, <span className="text-gradient">{firstName}!</span> 👋
+                <header className="mb-16 relative">
+                    <Star className="absolute -top-10 -left-10 opacity-60 animate-star" size={32} />
+                    <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
+                        ★ USER DASHBOARD
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-display font-black uppercase mb-4 tracking-tight leading-none">
+                        HEY, <span className="text-retro-yellow text-stroke-dark">{firstName}!</span>
                     </h1>
-                    <p className="text-xl" style={{ color: textMuted }}>
-                        Ready to accelerate your career? Let's find your skill gaps and build your roadmap.
+                    <p className="text-lg md:text-xl text-retro-dark opacity-80 max-w-2xl font-body">
+                        Your career acceleration platform. Let's find your skill gaps and build your roadmap.
                     </p>
-                </motion.div>
+                </header>
 
-                {/* Status Banner (if analysis exists) */}
+                {/* Main Stats / Status */}
                 {hasRoadmap && (
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-                        className="mb-10 p-6 rounded-2xl flex items-center justify-between flex-wrap gap-4"
-                        style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)" }}>
-                        <div className="flex items-center gap-3">
-                            <FaStar className="text-2xl text-green-400" />
+                    <div className="mb-12 retro-card-yellow !p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex items-center gap-5">
+                            <div className="text-[52px] font-display font-black text-outline-yellow leading-none" style={{ color: "var(--retro-text)", WebkitTextStroke: "2px var(--retro-text)" }}>
+                                OK
+                            </div>
                             <div>
-                                <p className="font-bold text-green-400">Analysis Complete!</p>
-                                <p className="text-sm" style={{ color: textMuted }}>
-                                    {selectedCompany ? `Targeted at ${selectedCompany}` : "General analysis"} · Ready to view
+                                <h3 className="font-display font-black uppercase text-xl text-retro-dark">Analysis Ready</h3>
+                                <p className="text-sm font-body opacity-80 text-retro-dark uppercase tracking-wider">
+                                    Target: {selectedCompany || "GENERAL"} ROLE
                                 </p>
                             </div>
                         </div>
-                        <Link to="/roadmap">
-                            <button className="px-6 py-2.5 rounded-xl font-bold text-sm transition-all"
-                                style={{ background: "#22c55e", color: "#ffffff" }}>
-                                View Roadmap →
-                            </button>
+                        <Link to="/roadmap" className="retro-btn-primary !bg-retro-dark !text-white !py-3 !px-8">
+                            VIEW ROADMAP →
                         </Link>
-                    </motion.div>
+                    </div>
                 )}
 
                 {/* Steps Grid */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
                     {steps.map((step, i) => {
                         const Icon = step.icon;
                         return (
                             <motion.div
                                 key={step.label}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 + i * 0.1 }}
+                                transition={{ delay: i * 0.1 }}
                                 onClick={() => !step.disabled && navigate(step.path)}
-                                className={`relative p-6 rounded-2xl transition-all duration-300 ${step.disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:-translate-y-1"}`}
-                                style={{
-                                    background: cardBg,
-                                    border: `1px solid ${step.done ? step.color + "40" : cardBorder}`,
-                                    boxShadow: step.done ? `0 4px 20px ${step.color}20` : "none",
-                                }}
+                                className={`retro-card !bg-[var(--retro-card-bg)] relative group ${step.disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
                             >
                                 {step.done && (
-                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                                        style={{ background: step.color }}>
-                                        ✓
+                                    <div className="absolute top-4 right-4 retro-badge-yellow !mb-0">
+                                        DONE
                                     </div>
                                 )}
-                                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                                    style={{ background: step.color + "18", border: `1px solid ${step.color}30` }}>
-                                    <Icon style={{ color: step.color }} className="text-xl" />
+                                <div className="text-[44px] font-display font-black text-outline-yellow mb-6 leading-none">
+                                    {step.num}
                                 </div>
-                                <h3 className="font-bold text-base mb-1" style={{ color: textPrimary }}>{step.label}</h3>
-                                <p className="text-sm" style={{ color: textMuted }}>{step.desc}</p>
+                                <h3 className="font-display font-black uppercase text-sm mb-2 text-retro-dark">{step.label}</h3>
+                                <p className="text-xs text-retro-dark opacity-70 font-body leading-relaxed">{step.desc}</p>
+                                
                                 {step.disabled && (
-                                    <p className="text-xs mt-2 font-medium" style={{ color: "#ef4444" }}>Complete previous step first</p>
+                                    <div className="mt-4 text-[9px] font-black uppercase tracking-widest opacity-50 text-retro-dark">
+                                        LOCKED
+                                    </div>
                                 )}
+                                
+                                <Star className="absolute -bottom-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity" size={18} />
                             </motion.div>
                         );
                     })}
-                </motion.div>
-
-                {/* Quick Start CTA */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
-                    className="text-center p-12 rounded-3xl"
-                    style={{ background: isDark ? "rgba(255,255,255,0.03)" : "rgba(33,150,243,0.04)", border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(33,150,243,0.1)"}` }}>
-                    <h2 className="text-3xl font-black mb-3" style={{ color: textPrimary }}>
-                        {hasRoadmap ? "Your roadmap is waiting 🚀" : "Ready to start? 🚀"}
-                    </h2>
-                    <p className="mb-8" style={{ color: textMuted }}>
-                        {hasRoadmap
-                            ? "Continue from where you left off or start a new analysis."
-                            : "Upload your resume and get a personalized AI career roadmap in under 60 seconds."}
-                    </p>
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        <Link to="/upload">
-                            <motion.button
-                                whileHover={{ scale: 1.03, y: -2 }}
-                                whileTap={{ scale: 0.97 }}
-                                className="px-10 py-4 rounded-xl font-bold text-lg"
-                                style={{ background: isDark ? "#ffffff" : "#2196F3", color: isDark ? "#0a0a0a" : "#ffffff", boxShadow: isDark ? "0 8px 24px rgba(255,255,255,0.15)" : "0 8px 24px rgba(33,150,243,0.3)" }}
-                            >
-                                {hasResume ? "Re-upload Resume" : "Upload Resume"} →
-                            </motion.button>
-                        </Link>
-                        {hasRoadmap && (
-                            <Link to="/roadmap">
-                                <motion.button
-                                    whileHover={{ scale: 1.03, y: -2 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className="px-10 py-4 rounded-xl font-bold text-lg"
-                                    style={{ background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(33,150,243,0.3)"}`, color: textPrimary }}
-                                >
-                                    View Roadmap
-                                </motion.button>
-                            </Link>
-                        )}
-                    </div>
-                </motion.div>
-
-                {/* Footer */}
-                <div className="text-center mt-12 text-sm" style={{ color: isDark ? "#333" : "#ccc" }}>
-                    SkillSync AI · Powered by Groq · Built by Naveen Kumar
                 </div>
+
+                {/* Large CTA Section */}
+                <div className="retro-card !bg-[var(--retro-card-bg)] !p-12 md:!p-16 border-[4px] relative overflow-hidden">
+                    <Star className="absolute top-10 right-10 opacity-40 animate-star" size={44} filled={false} />
+                    <div className="max-w-2xl relative z-10">
+                        <h2 className="text-3xl md:text-5xl font-display font-black uppercase mb-6 leading-tight text-retro-dark">
+                            {hasRoadmap ? "Your path is set 🚀" : "Start your journey 🚀"}
+                        </h2>
+                        <p className="text-lg text-retro-dark opacity-80 font-body mb-10">
+                            {hasRoadmap
+                                ? "You've successfully analyzed your skills. Continue following your roadmap to land your dream job."
+                                : "Upload your resume and get a personalized AI career roadmap in under 60 seconds."}
+                        </p>
+                        <div className="flex flex-wrap gap-6">
+                            <Link to="/upload" className="retro-btn-primary">
+                                {hasResume ? "RE-UPLOAD" : "UPLOAD"} →
+                            </Link>
+                            {hasRoadmap && (
+                                <Link to="/roadmap" className="retro-btn-secondary !py-4 !px-10 !text-sm">
+                                    VIEW ROADMAP
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <footer className="mt-20 border-t-2 border-retro-dark pt-8 flex flex-col md:flex-row justify-between items-center opacity-60 text-retro-dark text-[11px] font-black uppercase tracking-widest gap-4">
+                    <div>SKILLSYNC AI · POWERED BY GROQ</div>
+                    <div>BUILT BY NAVEEN KUMAR</div>
+                </footer>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
