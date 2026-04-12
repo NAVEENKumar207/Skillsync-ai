@@ -122,7 +122,7 @@ function Signup() {
           {/* Name */}
           <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.25 }}>
             <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Full Name</label>
-            <input type="text" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)}
+            <input type="text" placeholder="NK" value={name} onChange={e => setName(e.target.value)}
               required autoComplete="name" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </motion.div>
 
