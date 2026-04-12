@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaInstagram, FaLinkedin, FaGithub, FaEnvelope, FaSun, FaMoon } from "react-icons/fa";
+import { FaTwitter, FaLinkedin, FaGithub, FaEnvelope, FaSun, FaMoon } from "react-icons/fa";
 
 const Star = ({ className, filled = true, size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
@@ -173,7 +173,7 @@ function Landing() {
           <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
               { icon: FaEnvelope, label: "Email", href: "#" },
-              { icon: FaInstagram, label: "Instagram", href: "#" },
+              { icon: FaTwitter, label: "X", href: "https://x.com/NaveenK51833756" },
               { icon: FaLinkedin, label: "LinkedIn", href: "#" },
               { icon: FaGithub, label: "GitHub", href: "#" },
             ].map((contact, i) => (
