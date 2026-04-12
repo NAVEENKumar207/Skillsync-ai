@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";
 import { registerUser, saveSession } from "../utils/api";
@@ -21,6 +22,8 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { isDark } = useContext(ThemeContext);
@@ -50,7 +53,7 @@ function Signup() {
   const sub = isDark ? "#888" : "#666";
 
   const inputStyle = {
-    width: "100%", padding: "14px 16px", borderRadius: "12px",
+    width: "100%", padding: "14px 16px", paddingRight: "48px", borderRadius: "12px",
     background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
     border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
     color: text, fontSize: "0.95rem", outline: "none"
@@ -133,8 +136,16 @@ function Signup() {
           {/* Password */}
           <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.35 }}>
             <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Password</label>
-            <input type="password" placeholder="Min 6 characters" value={pwd} onChange={e => setPwd(e.target.value)}
-              required autoComplete="new-password" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <div className="relative">
+              <input type={showPassword ? "text" : "password"} placeholder="Min 6 characters" value={pwd} onChange={e => setPwd(e.target.value)}
+                required autoComplete="new-password" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+              <button type="button" onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
+                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {pwd && (
               <div className="mt-2">
                 <div className="flex justify-between text-xs mb-1" style={{ color: sub }}>
@@ -156,10 +167,18 @@ function Signup() {
           {/* Confirm Password */}
           <motion.div initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
             <label className="block text-xs font-bold mb-1.5 tracking-wide uppercase" style={{ color: sub }}>Confirm Password</label>
-            <input type="password" placeholder="Repeat password" value={confirm} onChange={e => setConfirm(e.target.value)}
-              required autoComplete="new-password"
-              style={{ ...inputStyle, borderColor: pwdMismatch ? "#ef4444" : pwdMatch ? "#22c55e" : (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)") }}
-              onFocus={onFocus} onBlur={onBlur} />
+            <div className="relative">
+              <input type={showConfirm ? "text" : "password"} placeholder="Repeat password" value={confirm} onChange={e => setConfirm(e.target.value)}
+                required autoComplete="new-password"
+                style={{ ...inputStyle, borderColor: pwdMismatch ? "#ef4444" : pwdMatch ? "#22c55e" : (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)") }}
+                onFocus={onFocus} onBlur={onBlur} />
+              <button type="button" onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
+                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
+              >
+                {showConfirm ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {confirm && (
               <p className="text-xs mt-1.5 font-semibold" style={{ color: pwdMatch ? "#22c55e" : "#ef4444" }}>
                 {pwdMatch ? "✓ Passwords match" : "✗ Passwords don't match"}

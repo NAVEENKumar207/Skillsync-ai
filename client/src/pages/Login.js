@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";
 import { loginUser, saveSession } from "../utils/api";
@@ -8,6 +9,7 @@ import { loginUser, saveSession } from "../utils/api";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -158,22 +160,32 @@ function Login() {
                 Forgot password?
               </Link>
             </div>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              style={{
-                width: "100%", padding: "14px 16px", borderRadius: "12px",
-                background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-                border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-                color: text, fontSize: "0.95rem", outline: "none"
-              }}
-              onFocus={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.3)" : "#2196F3"}
-              onBlur={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                style={{
+                  width: "100%", padding: "14px 16px", paddingRight: "48px", borderRadius: "12px",
+                  background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
+                  border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
+                  color: text, fontSize: "0.95rem", outline: "none"
+                }}
+                onFocus={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.3)" : "#2196F3"}
+                onBlur={e => e.target.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-lg focus:outline-none transition-colors"
+                style={{ color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </motion.div>
 
           {/* Submit */}

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
     FaUpload, FaBuilding, FaChartLine, FaRoute, FaSignOutAlt,
-    FaStar,
+    FaStar, FaSync
 } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";
@@ -20,6 +20,17 @@ function Dashboard() {
     const handleLogout = () => {
         clearSession();
         navigate("/");
+    };
+
+    const handleReset = () => {
+        if (window.confirm("Are you sure you want to reset the entire process? This will clear your current resume and analysis data.")) {
+            localStorage.removeItem("resumeText");
+            localStorage.removeItem("selectedCompany");
+            localStorage.removeItem("selectedRole");
+            localStorage.removeItem("aiRoadmap");
+            window.location.reload(); // Refresh to update UI state or navigate
+            navigate("/upload");
+        }
     };
 
     const bg = isDark ? "#0a0a0a" : "#f5f7fa";
@@ -86,13 +97,22 @@ function Dashboard() {
                             <h2 className="text-xl font-black" style={{ color: textPrimary }}>{user?.name || "User"}</h2>
                         </div>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all"
-                        style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444" }}
-                    >
-                        <FaSignOutAlt /> Sign Out
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleReset}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all"
+                            style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(33,150,243,0.1)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.2)"}`, color: isDark ? "#ffffff" : "#2196F3" }}
+                        >
+                            <FaSync /> Reset Process
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all"
+                            style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444" }}
+                        >
+                            <FaSignOutAlt /> Sign Out
+                        </button>
+                    </div>
                 </motion.div>
 
                 {/* Hero */}
