@@ -88,7 +88,6 @@ function Upload() {
     }
   };
 
-  const accentColor = isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.15)";
   const accentStrong = isDark ? "#ffffff" : "#2196F3";
   const textPrimary = isDark ? "#ffffff" : "#0a0a0a";
   const textMuted = isDark ? "#aaaaaa" : "#555555";
