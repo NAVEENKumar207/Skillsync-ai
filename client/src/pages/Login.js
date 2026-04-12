@@ -33,8 +33,6 @@ function Login() {
   const bg = isDark ? "#0a0a0a" : "#f5f7fa";
   const text = isDark ? "#ffffff" : "#0a0a0a";
   const sub = isDark ? "#888" : "#666";
-  const accent = isDark ? "rgba(255,255,255,0.12)" : "rgba(33,150,243,0.15)";
-  const accentHover = isDark ? "#ffffff" : "#2196F3";
 
   return (
     <motion.div

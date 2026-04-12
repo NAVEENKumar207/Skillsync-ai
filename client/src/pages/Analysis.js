@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaChartLine, FaBrain, FaVolumeUp, FaVolumeMute, FaArrowRight, FaExclamationTriangle } from "react-icons/fa";
+import { FaBrain, FaVolumeUp, FaVolumeMute, FaArrowRight, FaExclamationTriangle } from "react-icons/fa";
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ThemeContext } from '../context/ThemeContext';
 import { analyzeResume } from '../utils/api';

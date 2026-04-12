@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
     FaUpload, FaBuilding, FaChartLine, FaRoute, FaSignOutAlt,
-    FaUser, FaStar, FaClock,
+    FaStar,
 } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";

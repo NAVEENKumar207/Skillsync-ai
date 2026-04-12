@@ -1,7 +1,7 @@
 import { useState, useContext, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaCloudUploadAlt, FaFilePdf, FaCheckCircle, FaTimesCircle, FaKeyboard } from "react-icons/fa";
+import { FaCloudUploadAlt, FaFilePdf, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";
 

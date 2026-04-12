@@ -14,15 +14,6 @@ const post = async (url, body = {}) => {
     return data;
 };
 
-const get = async (url, token) => {
-    const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong.");
-    return data;
-};
-
 /* ─── Auth ──────────────────────────────────────────────────────── */
 export const registerUser = (body) => post(`${BASE}/auth/register`, body);
 export const loginUser = (body) => post(`${BASE}/auth/login`, body);
