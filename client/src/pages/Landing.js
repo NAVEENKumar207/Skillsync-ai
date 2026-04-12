@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { FaInstagram, FaLinkedin, FaPhoneAlt, FaEnvelope, FaHome, FaUser } from "react-icons/fa";
+import { FaInstagram, FaLinkedin, FaGithub, FaEnvelope, FaHome, FaUser } from "react-icons/fa";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ThemeContext } from "../context/ThemeContext";
 
@@ -159,7 +159,7 @@ function Landing() {
               { icon: FaEnvelope, label: "Email", href: "mailto:naveenkumarsaro@gmail.com" },
               { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/itz_me_naveensaro?igsh=MW05cjBzOHUwbnExcg==" },
               { icon: FaLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/naveen-kumar-s-60b18232a" },
-              { icon: FaPhoneAlt, label: "Call Me", href: "tel:+919944679814" },
+              { icon: FaGithub, label: "GitHub", href: "https://github.com/NAVEENKumar207" },
             ].map((contact, i) => (
               <motion.a
                 key={contact.label}

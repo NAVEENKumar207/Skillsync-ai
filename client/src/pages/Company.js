@@ -24,7 +24,7 @@ const Company = () => {
 
   const handleSelect = (company) => {
     localStorage.setItem('selectedCompany', company.name);
-    navigate('/analysis');
+    navigate('/role');
   };
 
   const containerVariants = {

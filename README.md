@@ -2,14 +2,15 @@
 
 > AI-powered Resume Analyzer & Career Roadmap Generator
 
-SkillSync AI analyzes your resume against top tech companies (Google, Meta, Amazon, etc.) using Google Gemini Pro and generates a personalized skill gap analysis and 3-month preparation roadmap.
+SkillSync AI analyzes your resume against top tech companies (Google, Meta, Amazon, etc.) using Groq AI and generates a personalized skill gap analysis and 3-month preparation roadmap.
 
 ## ✨ Features
 
 - 🔐 **Full Authentication** — Register, Login, Forgot Password (JWT + MongoDB)
 - 📄 **Resume Upload** — PDF/DOC file parsing
 - 🏢 **Company Selection** — Google, Microsoft, Amazon, Meta, Apple, Netflix
-- 🤖 **AI Analysis** — Google Gemini Pro powered skill gap identification
+- 🎯 **Job Role Selection** — Frontend, Backend, Full Stack, Data Science, DevOps, Mobile
+- 🤖 **AI Analysis** — Groq AI powered skill gap identification
 - 🗺️ **Roadmap Generation** — 3-month personalized preparation plan with resources
 - 🔊 **Text-to-Speech** — Listen to your AI roadmap
 - 🌙 **Dark/Light Mode** — Seamless theme switching
@@ -19,7 +20,7 @@ SkillSync AI analyzes your resume against top tech companies (Google, Meta, Amaz
 **Frontend:** React, Tailwind CSS, Framer Motion, React Router  
 **Backend:** Node.js, Express.js  
 **Database:** MongoDB Atlas  
-**AI:** Google Gemini Pro  
+**AI:** Groq AI (Llama 3.3 70B)  
 **Auth:** JWT + bcryptjs
 
 ## 🚀 Getting Started
@@ -27,7 +28,7 @@ SkillSync AI analyzes your resume against top tech companies (Google, Meta, Amaz
 ### Prerequisites
 - Node.js v18+
 - MongoDB Atlas account
-- Google Gemini API key
+- Groq API key
 
 ### Installation
 
@@ -50,7 +51,7 @@ In the `server` directory, create a `.env` file and add the following:
 ```
 MONGO_URI=YOUR_MONGODB_CONNECTION_STRING
 JWT_SECRET=YOUR_JWT_SECRET_KEY
-GEMINI_API_KEY=YOUR_GOOGLE_GEMINI_API_KEY
+GROQ_API_KEY=YOUR_GROQ_API_KEY
 
 # Optional: For sending password reset emails
 EMAIL_USER=YOUR_GMAIL_ADDRESS
@@ -76,7 +77,7 @@ Open [http://localhost:3000](http://localhost:3000)
 skillsync-ai/
 ├── client/                 # React frontend
 │   └── src/
-│       ├── pages/         # Landing, Login, Signup, Upload, Company, Analysis, Roadmap
+│       ├── pages/         # Landing, Login, Signup, Upload, Company, Role, Analysis, Roadmap
 │       ├── components/    # ThemeToggle, Assistant
 │       ├── context/       # ThemeContext
 │       └── utils/         # api.js (centralized API calls)

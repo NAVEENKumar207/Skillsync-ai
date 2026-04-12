@@ -38,7 +38,7 @@ function Signup() {
     try {
       const data = await registerUser({ name, email, password: pwd });
       saveSession(data.token, data.user);
-      navigate("/upload");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
       setLoading(false);

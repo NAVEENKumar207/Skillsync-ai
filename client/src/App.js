@@ -6,11 +6,14 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Company from "./pages/Company";
+import Role from "./pages/Role";
 import Analysis from "./pages/Analysis";
 import Roadmap from "./pages/Roadmap";
 import Assistant from "./components/Assistant";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
 import "./styles/theme.css";
 
@@ -20,15 +23,20 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        {/* Public Routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/upload" element={<Upload />} />
-        <Route path="/company" element={<Company />} />
-        <Route path="/analysis" element={<Analysis />} />
-        <Route path="/roadmap" element={<Roadmap />} />
+
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
+        <Route path="/company" element={<ProtectedRoute><Company /></ProtectedRoute>} />
+        <Route path="/role" element={<ProtectedRoute><Role /></ProtectedRoute>} />
+        <Route path="/analysis" element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
+        <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
       </Routes>
     </AnimatePresence>
   );

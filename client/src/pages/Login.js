@@ -23,7 +23,7 @@ function Login() {
       const data = await loginUser({ email, password });
       saveSession(data.token, data.user);
       setSuccess(true);
-      setTimeout(() => navigate("/upload"), 1000);
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (err) {
       setError(err.message);
       setLoading(false);
