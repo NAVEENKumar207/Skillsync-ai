@@ -102,7 +102,12 @@ function Landing() {
 
       {/* Marquee Ticker */}
       <div className="marquee-container">
-        <div className="marquee-inner border-y-2 border-retro-dark bg-[var(--retro-bg)]">
+        <div className="marquee-inner">
+          <span className="marquee-text">★ AI-POWERED</span>
+          <span className="marquee-text">★ CAREER ROADMAP</span>
+          <span className="marquee-text">★ SKILL ANALYSIS</span>
+          <span className="marquee-text">★ RESUME REVIEW</span>
+          <span className="marquee-text">★ TOP COMPANIES</span>
           <span className="marquee-text">★ AI-POWERED</span>
           <span className="marquee-text">★ CAREER ROADMAP</span>
           <span className="marquee-text">★ SKILL ANALYSIS</span>
