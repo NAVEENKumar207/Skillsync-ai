@@ -36,7 +36,23 @@ function Dashboard() {
 
     useEffect(() => {
         const savedHistory = JSON.parse(localStorage.getItem("analysisHistory") || "[]");
-        setHistory(savedHistory);
+        
+        // Migration: If we have a roadmap but no history, add current to history
+        const currentRoadmap = localStorage.getItem("aiRoadmap");
+        if (savedHistory.length === 0 && currentRoadmap) {
+            const currentEntry = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString(),
+                company: localStorage.getItem("selectedCompany")?.toUpperCase() || "GENERAL",
+                role: localStorage.getItem("selectedRole")?.toUpperCase() || "SOFTWARE ENGINEER",
+                analysis: currentRoadmap
+            };
+            const newHistory = [currentEntry];
+            localStorage.setItem("analysisHistory", JSON.stringify(newHistory));
+            setHistory(newHistory);
+        } else {
+            setHistory(savedHistory);
+        }
     }, []);
 
     const toggleTheme = () => setIsDark(!isDark);
