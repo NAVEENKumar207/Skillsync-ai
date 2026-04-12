@@ -82,6 +82,21 @@ function Analysis() {
       setRawAnalysis(data.analysis);
       setSections(parseAnalysis(data.analysis));
       localStorage.setItem("aiRoadmap", data.analysis);
+
+      // Save to History
+      const history = JSON.parse(localStorage.getItem("analysisHistory") || "[]");
+      const newEntry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        company: selectedCompany.toUpperCase() || "GENERAL",
+        role: selectedRole.toUpperCase() || "SOFTWARE ENGINEER",
+        analysis: data.analysis
+      };
+      
+      // Keep only unique ones or just prepend? 
+      // Let's prepend to show newest first
+      localStorage.setItem("analysisHistory", JSON.stringify([newEntry, ...history]));
+
       setPhase("done");
 
     } catch (err) {
