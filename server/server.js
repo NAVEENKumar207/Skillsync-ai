@@ -23,8 +23,7 @@ require("dotenv").config();
 const app = express();
 
 /* ─── Middleware ─────────────────────────────────────────────────── */
-const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
-app.use(cors({ origin: clientUrl, credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
@@ -405,9 +404,4 @@ app.get("/", (req, res) => {
 
 /* ── Start Server ──────────────────────────────────────────────── */
 const PORT = process.env.PORT || 5000;
-
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => console.log(`🚀  Server → http://localhost:${PORT}`));
-}
-
-module.exports = app;
+app.listen(PORT, () => console.log(`🚀  Server → http://localhost:${PORT}`));
