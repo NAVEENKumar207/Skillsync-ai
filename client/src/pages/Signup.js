@@ -30,6 +30,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [favoriteColor, setFavoriteColor] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,7 @@ function Signup() {
     setLoading(true);
     setError("");
     try {
-      const data = await registerUser({ name, email, password: pwd });
+      const data = await registerUser({ name, email, password: pwd, favoriteColor });
       saveSession(data.token, data.user);
       navigate("/dashboard");
     } catch (err) {
@@ -175,6 +176,18 @@ function Signup() {
                   {pwdMatch ? "✓ MATCH" : "✗ MISMATCH"}
                 </p>
               )}
+            </div>
+
+            <div>
+              <label className="retro-label">Favorite Color (Security Question)</label>
+              <input
+                type="text"
+                placeholder="E.G. NEON BLUE"
+                value={favoriteColor}
+                onChange={(e) => setFavoriteColor(e.target.value)}
+                required
+                className="retro-input uppercase placeholder:opacity-50"
+              />
             </div>
 
             <button

@@ -17,7 +17,7 @@ const post = async (url, body = {}) => {
 /* ─── Auth ──────────────────────────────────────────────────────── */
 export const registerUser = (body) => post(`${BASE}/auth/register`, body);
 export const loginUser = (body) => post(`${BASE}/auth/login`, body);
-export const forgotPassword = (email) => post(`${BASE}/auth/forgot-password`, { email });
+export const forgotPassword = (body) => post(`${BASE}/auth/forgot-password`, body);
 export const resetPassword = (token, password) =>
   post(`${BASE}/auth/reset-password/${token}`, { password });
 

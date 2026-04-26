@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { forgotPassword } from "../utils/api";
 
@@ -16,17 +16,24 @@ const Star = ({ className, filled = true, size = 22 }) => (
 
 function ForgotPassword() {
     const [email, setEmail] = useState("");
+    const [favoriteColor, setFavoriteColor] = useState("");
+    const [lastPassword, setLastPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [sent, setSent] = useState(false);
+    const [verified, setVerified] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
         try {
-            await forgotPassword(email);
-            setSent(true);
+            const data = await forgotPassword({ email, favoriteColor, lastPassword });
+            setVerified(true);
+            // Redirect to reset password with the token from backend
+            setTimeout(() => {
+                navigate(`/reset-password/${data.resetToken}`);
+            }, 2000);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -47,28 +54,25 @@ function ForgotPassword() {
                 <div className="retro-card !p-10 md:!p-12 shadow-none">
                     <div className="text-center mb-10">
                         <h1 className="text-3xl md:text-4xl font-display font-black uppercase mb-2 text-retro-dark">
-                            Reset
+                            Verify
                         </h1>
                         <p className="text-sm font-body text-retro-dark opacity-80">
-                            Enter email to receive reset link
+                            Identity Challenge
                         </p>
                     </div>
 
                     <AnimatePresence>
-                        {sent ? (
+                        {verified ? (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="text-center py-6"
                             >
-                                <div className="text-5xl mb-6">📬</div>
-                                <p className="font-display font-black text-xl mb-4 uppercase text-retro-dark">Check Inbox</p>
+                                <div className="text-5xl mb-6">🔓</div>
+                                <p className="font-display font-black text-xl mb-4 uppercase text-retro-dark">Verified!</p>
                                 <p className="text-sm mb-10 text-retro-dark opacity-80 font-body leading-relaxed">
-                                    A reset link has been sent to <strong className="text-retro-dark">{email}</strong>.
+                                    Identity confirmed. Redirecting to reset page…
                                 </p>
-                                <Link to="/login" className="retro-btn-primary inline-block">
-                                    Back to Login
-                                </Link>
                             </motion.div>
                         ) : (
                             <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -82,9 +86,9 @@ function ForgotPassword() {
                                     </motion.div>
                                 )}
 
-                                <form onSubmit={handleSubmit} className="space-y-6">
+                                <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
-                                        <label className="retro-label">Email Address</label>
+                                        <label className="retro-label">Account Email</label>
                                         <input
                                             type="email"
                                             placeholder="YOU@EXAMPLE.COM"
@@ -95,19 +99,47 @@ function ForgotPassword() {
                                         />
                                     </div>
 
+                                    <div className="py-2">
+                                        <div className="h-[1px] bg-retro-dark opacity-20 relative">
+                                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-retro-grid px-2 text-[10px] font-black opacity-50">OR PROVIDE ONE:</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="retro-label">Favorite Color</label>
+                                        <input
+                                            type="text"
+                                            placeholder="SECRET COLOR"
+                                            value={favoriteColor}
+                                            onChange={(e) => setFavoriteColor(e.target.value)}
+                                            className="retro-input uppercase"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="retro-label">Last Remembered Password</label>
+                                        <input
+                                            type="password"
+                                            placeholder="PREVIOUS PASSWORD"
+                                            value={lastPassword}
+                                            onChange={(e) => setLastPassword(e.target.value)}
+                                            className="retro-input"
+                                        />
+                                    </div>
+
                                     <button
                                         type="submit"
                                         disabled={loading}
                                         className="retro-btn-primary w-full mt-4 flex justify-center items-center"
                                     >
-                                        {loading ? "SENDING…" : "SEND RESET LINK"}
+                                        {loading ? "VERIFYING…" : "VERIFY IDENTITY"}
                                     </button>
                                 </form>
                             </motion.div>
                         )}
                     </AnimatePresence>
 
-                    {!sent && (
+                    {!verified && (
                         <p className="text-center text-[12px] mt-8 text-retro-dark font-body opacity-90">
                             Remembered it?{" "}
                             <Link

@@ -34,14 +34,14 @@ Stop fighting with formatting. SkillSync uses advanced text extraction to pull r
 ### 🎯 [02] Tier-1 Benchmarking
 Our AI compares your profile against the actual "Logic Gates" used by FAANG+ engineering managers. It looks for specific markers: System Design mastery, Production-grade implementation, and Behavioral leadership.
 
-### 🗺️ [03] The 90-Day Protocol
+### 🛡️ [03] Identity Challenge Recovery
+No email servers required. SkillSync uses a secure **Identity Challenge** system. Verify your identity using your **Security Color** or **Last Remembered Password** to regain access instantly.
+
+### 🗺️ [04] The 90-Day Protocol
 We don't give "tips." we give a **Roadmap**.
 - **Phase 1: Foundation Rewriting** - Plugging the immediate technical leaks.
 - **Phase 2: Production Build** - Guiding you through building a high-scale project.
 - **Phase 3: Terminal Mastery** - Polishing your system design and behavioral storytelling.
-
-### 🤖 [04] On-Call AI Assistant
-A dedicated career debugging module. Ask about specific interview questions, request code reviews for your roadmap projects, or simulate a salary negotiation.
 
 ---
 
@@ -53,7 +53,7 @@ A dedicated career debugging module. Ask about specific interview questions, req
 | **Backend** | Node.js, Express v5 (Next-Gen), JWT (Security) |
 | **Database** | MongoDB Atlas (Cloud NoSQL) |
 | **AI Engine** | Groq Cloud (Llama-3.3-70B-Versatile) |
-| **Infrastructure** | Helmet (Security), Rate-Limit (DDoS Protection) |
+| **Security** | Identity Challenge Recovery, Helmet, Rate-Limit |
 
 ---
 
@@ -79,8 +79,6 @@ A dedicated career debugging module. Ask about specific interview questions, req
    MONGO_URI=your_mongodb_uri
    JWT_SECRET=your_random_secret
    GROQ_API_KEY=your_groq_key
-   EMAIL_USER=your_gmail
-   EMAIL_PASS=your_app_password
    ```
 
 3. **Launch System**
