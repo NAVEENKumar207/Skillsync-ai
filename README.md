@@ -1,138 +1,130 @@
-# 🕹️ SKILLSYNC AI [v1.0.0]
-## AI-POWERED CAREER UPGRADE ENGINE
+# ⚡ SKILLSYNC
+### *Bridge the Gap Between Your Resume and Tier-1 Reality*
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Groq AI](https://img.shields.io/badge/Groq_AI-F3D03E?style=for-the-badge&logo=google-gemini&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 
 ```text
-  ____  _ _ _ _ ____                   _    ___ 
- / ___|| | (_) | ___| _   _ _ __   ___| |  / _ \
- \___ \| | | | \___ \| | | | '_ \ / __| | | | | |
-  ___) | | | |  ___) | |_| | | | | (__|_| | |_| |
- |____/|_|_|_|_|____/ \__, |_| |_|\___|_|  \___/ 
-                      |___/                     
+   _____ _    _ _ _       _____                     
+  / ____| |  (_) | |     / ____|                    
+ | (___ | | ___| | | ___| (___  _   _ _ __   ___    
+  \___ \| |/ / | | |/ __|\___ \| | | | '_ \ / __|   
+  ____) |   <| | | | (__ ____) | |_| | | | | (__    
+ |_____/|_|\_\_|_|_|\___|_____/ \__, |_| |_|\___|   
+                                 __/ |              
+                                |___/               
 ```
 
 ---
 
-### 🚀 SYSTEM STATUS: OPERATIONAL
-**SkillSync AI** is a high-performance career optimization platform designed to bridge the gap between your current technical profile and your dream role at top-tier tech entities. Powered by **Groq Llama-3.3-70B**, it executes deep, multi-dimensional analysis of your resume against corporate logic gates.
+## 🌟 OVERVIEW
+**SkillSync** is an AI-driven career acceleration engine. It doesn't just "check" your resume; it simulates a Tier-1 technical recruiter's mindset. By leveraging the **Groq Llama-3.3-70B** model, SkillSync identifies deep architectural gaps in your experience and builds a hyper-personalized, 90-day execution protocol to get you hired at companies like Google, Meta, and Amazon.
 
 ---
 
-### ✨ CORE FEATURES
+## 🔥 KEY CAPABILITIES
 
-- **[P-01] DEEP PARSING ENGINE** 📄  
-  Accepts **.PDF**, **.DOCX**, and **.TXT** inputs. Automatically redacts sensitive metadata (PII) before analysis to ensure privacy.
-  
-- **[P-02] TARGETED BENCHMARKING** 🏢  
-  Cross-references your profile against specific hiring standards for roles at Google, Meta, Amazon, Netflix, and more.
+### 🧠 [01] Deep Neural Parsing
+Stop fighting with formatting. SkillSync uses advanced text extraction to pull raw logic from **PDF, DOCX, and TXT** files, sanitizing PII (Personally Identifiable Information) before it ever hits the AI core.
 
-- **[P-03] 3-MONTH UPGRADE ROADMAP** 🗺️  
-  Generates a week-by-week, day-by-day protocol:
-  - **Month 1:** Core technical foundation and gap filling.
-  - **Month 2:** Production-grade implementation of complex projects.
-  - **Month 3:** System design mastery and behavioral interview excellence.
+### 🎯 [02] Tier-1 Benchmarking
+Our AI compares your profile against the actual "Logic Gates" used by FAANG+ engineering managers. It looks for specific markers: System Design mastery, Production-grade implementation, and Behavioral leadership.
 
-- **[P-04] INTEGRATED AI ASSISTANT** 🤖  
-  A persistent, Groq-powered chat module for real-time career debugging, interview prep, and technical advice.
+### 🗺️ [03] The 90-Day Protocol
+We don't give "tips." we give a **Roadmap**.
+- **Phase 1: Foundation Rewriting** - Plugging the immediate technical leaks.
+- **Phase 2: Production Build** - Guiding you through building a high-scale project.
+- **Phase 3: Terminal Mastery** - Polishing your system design and behavioral storytelling.
 
-- **[P-05] SECURE AUTHENTICATION** 🔐  
-  Robust JWT-based authentication system with password recovery via email.
+### 🤖 [04] On-Call AI Assistant
+A dedicated career debugging module. Ask about specific interview questions, request code reviews for your roadmap projects, or simulate a salary negotiation.
 
 ---
 
-### 🛠️ CORE ARCHITECTURE (STACK)
+## 🛠️ TECH STACK
 
-| MODULE | COMPONENT |
+| Layer | Technology |
 | :--- | :--- |
-| **USER INTERFACE** | React.js 19, Tailwind CSS (Retro-Modern), Framer Motion |
-| **LOGIC ENGINE** | Node.js, Express.js (v5), JWT Auth |
-| **DATA STORAGE** | MongoDB Atlas (NoSQL) |
-| **AI CORE** | Groq Cloud API (Llama-3.3-70B-Versatile) |
-| **SERVICES** | Nodemailer (Gmail), PDF-Parse, Mammoth (DOCX) |
-| **SECURITY** | Helmet.js, Express-Rate-Limit, BcryptJS |
+| **Frontend** | React 19, Framer Motion (Animations), Tailwind CSS |
+| **Backend** | Node.js, Express v5 (Next-Gen), JWT (Security) |
+| **Database** | MongoDB Atlas (Cloud NoSQL) |
+| **AI Engine** | Groq Cloud (Llama-3.3-70B-Versatile) |
+| **Infrastructure** | Helmet (Security), Rate-Limit (DDoS Protection) |
 
 ---
 
-### 📂 SYSTEM STRUCTURE
+## 🚀 QUICK START
+
+### Prerequisites
+- Node.js (v18+)
+- MongoDB Atlas Account
+- Groq AI API Key
+
+### Installation
+
+1. **Clone & Install**
+   ```bash
+   git clone https://github.com/NAVEENKumar207/Skillsync-ai.git
+   cd Skillsync-ai
+   ```
+
+2. **Configure Environment**
+   Create a `.env` file in the `server/` directory:
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_uri
+   JWT_SECRET=your_random_secret
+   GROQ_API_KEY=your_groq_key
+   EMAIL_USER=your_gmail
+   EMAIL_PASS=your_app_password
+   ```
+
+3. **Launch System**
+   ```bash
+   # Terminal 1: Backend
+   cd server && npm install && npm start
+
+   # Terminal 2: Frontend
+   cd client && npm install && npm start
+   ```
+
+---
+
+## 📂 ARCHITECTURE
 
 ```text
-SKILLSYNC-AI/
-├── client/              # React Frontend (Vite/CRA)
-│   ├── public/          # Static Assets
-│   └── src/
-│       ├── components/  # Reusable UI Modules
-│       ├── context/     # State Management
-│       ├── pages/       # Route Views (Dashboard, Upload, etc.)
-│       ├── styles/      # Global CSS & Tailwind Config
-│       └── utils/       # API Helpers & Client-side Logic
-├── server/              # Node.js/Express Backend
-│   ├── server.js        # Main API Gateway & Routes
-│   ├── .env.example     # Environment Blueprint
-│   └── package.json     # Backend Dependencies
-└── README.md            # System Protocols
+SKILLSYNC/
+├── client/              # React Interface
+│   ├── src/components/  # UI Atoms & Molecules
+│   └── src/pages/       # Core Logic Views
+├── server/              # Express AI Gateway
+│   ├── server.js        # Main Controller
+│   └── utils/           # Diagnostic Tools
+└── README.md            # System Manual
 ```
 
 ---
 
-### 🕹️ INITIALIZATION SEQUENCE
-
-#### 1. CLONE SOURCE
-```bash
-git clone https://github.com/NAVEENKumar207/Skillsync-ai.git
-cd Skillsync-ai
-```
-
-#### 2. BOOT BACKEND (SERVER)
-```bash
-cd server
-npm install
-# Create .env from template
-cp .env.example .env
-# Start production server
-npm start
-# OR start development mode (requires nodemon)
-npm run dev
-```
-
-#### 3. BOOT FRONTEND (CLIENT)
-```bash
-cd ../client
-npm install
-npm start
-```
+## 🤝 CONTRIBUTING
+We welcome engineers to improve the AI prompts and UI.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-### 🔐 ENVIRONMENT CONFIGURATION
-
-Configure your `server/.env` with these critical constants:
-
-| Variable | Description |
-| :--- | :--- |
-| `PORT` | Local server port (default: 5000) |
-| `MONGO_URI` | MongoDB Atlas Connection String |
-| `JWT_SECRET` | Secret key for token signing |
-| `GROQ_API_KEY` | Your API key from Groq Cloud |
-| `EMAIL_USER` | Gmail address for recovery system |
-| `EMAIL_PASS` | Gmail App Password (not account password) |
-| `CLIENT_URL` | Frontend URL (default: http://localhost:3000) |
+## 📄 LICENSE
+Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ---
 
-### 🤝 CONTRIBUTION PROTOCOL
+## ✉️ CONTACT
+**Naveen Kumar** - [GitHub](https://github.com/NAVEENKumar207)
 
-1. **FORK** the source code.
-2. **BRANCH** your feature (`git checkout -b feature/NewModule`).
-3. **COMMIT** changes (`git commit -m 'feat: add deep-link parsing'`).
-4. **PUSH** to origin and open a **PULL REQUEST**.
-
----
-
-### 📄 LICENSE
-**DISTRIBUTED UNDER THE MIT LICENSE.** (C) 2026 SKILLSYNC AI.
-
----
-
-### 📧 TERMINAL CONTACT
-
-**Naveen Kumar** - [GitHub Profile](https://github.com/NAVEENKumar207)  
 Project Link: [https://github.com/NAVEENKumar207/Skillsync-ai](https://github.com/NAVEENKumar207/Skillsync-ai)
