@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
-import { FaCloudUploadAlt, FaFilePdf, FaCheckCircle, FaTimesCircle, FaArrowLeft } from "react-icons/fa";
+import { FaCloudUploadAlt, FaFilePdf, FaCheckCircle, FaTimesCircle, FaArrowLeft, FaHome } from "react-icons/fa";
 
 const Star = ({ className, filled = true, size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
@@ -102,9 +102,14 @@ function Upload() {
       <Star className="absolute bottom-10 right-[10%] opacity-60 animate-star" size={32} />
 
       <div className="max-w-3xl mx-auto relative z-10">
-        <Link to="/dashboard" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
-          <FaArrowLeft size={10} /> Back to Dashboard
-        </Link>
+        <div className="flex justify-between items-center mb-12">
+            <Link to="/dashboard" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors">
+              <FaArrowLeft size={10} /> Back to Dashboard
+            </Link>
+            <Link to="/dashboard" className="retro-btn-secondary !py-1.5 !px-3 flex items-center gap-2">
+                <FaHome size={12} /> <span className="text-[10px]">DASHBOARD</span>
+            </Link>
+        </div>
 
         <div className="retro-card !p-10 md:!p-16 shadow-none relative overflow-hidden">
           <Star className="absolute top-8 right-8 opacity-40 animate-star" size={24} filled={false} />

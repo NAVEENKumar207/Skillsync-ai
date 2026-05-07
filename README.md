@@ -11,10 +11,10 @@
 ```text
    _____ _    _ _ _       _____                     
   / ____| |  (_) | |     / ____|                    
- | (___ | | ___| | | ___| (___  _   _ _ __   ___    
-  \___ \| |/ / | | |/ __|\___ \| | | | '_ \ / __|   
-  ____) |   <| | | | (__ ____) | |_| | | | | (__    
- |_____/|_|\_\_|_|_|\___|_____/ \__, |_| |_|\___|   
+ | (___ | | ___| | |    | (___  _   _ _ __   ___    
+  \___ \| |/ / | | |     \___ \| | | | '_ \ / __|   
+  ____) |   <| | | |     ____) | |_| | | | | (__    
+ |_____/|_|\_\_|_|_|    |_____/ \__, |_| |_|\___|   
                                  __/ |              
                                 |___/               
 ```
@@ -34,7 +34,13 @@ Stop fighting with formatting. SkillSync uses advanced text extraction to pull r
 ### 🎯 [02] Tier-1 Benchmarking
 Our AI compares your profile against the actual "Logic Gates" used by FAANG+ engineering managers. It looks for specific markers: System Design mastery, Production-grade implementation, and Behavioral leadership.
 
-### 🛡️ [03] Identity Challenge Recovery
+### 💾 [03] Analysis Persistence & History
+Never lose your progress. SkillSync now features a robust **Save to History** system. Persist your AI-generated roadmap and analysis directly to your profile database with a single click. Review your career evolution over time through your personal dashboard.
+
+### 🧭 [04] Seamless Navigation
+Enhanced UX with a global navigation protocol. Every step of the analysis pipeline (Upload, Company, Role, Analysis, Roadmap) now features instant **Back to Dashboard** controls and intuitive breadcrumbs to keep you in the flow.
+
+### 🛡️ [05] Identity Challenge Recovery
 No email servers required. SkillSync uses a secure **Identity Challenge** system. Verify your identity using your **Security Color** or **Last Remembered Password** to regain access instantly.
 
 ### 🗺️ [04] The 90-Day Protocol

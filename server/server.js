@@ -141,6 +141,17 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", userSchema);
 
+/* ─── Analysis History Schema ────────────────────────────────────── */
+const analysisHistorySchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  analysis: { type: String, required: true },
+  company: { type: String, required: true },
+  role: { type: String, required: true },
+  date: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+const AnalysisHistory = mongoose.model("AnalysisHistory", analysisHistorySchema);
+
 /* ─── Helpers ────────────────────────────────────────────────────── */
 const JWT_SECRET = process.env.JWT_SECRET;
 const signToken = (id) => jwt.sign({ id }, JWT_SECRET, { expiresIn: "7d" });
@@ -153,6 +164,27 @@ const checkDB = (res) => {
     return false;
   }
   return true;
+};
+
+/* ─── Auth Middleware ───────────────────────────────────────────── */
+const authenticateToken = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided." });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) return res.status(401).json({ error: "User not found." });
+    req.user = user;
+    next();
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ error: "Token expired. Please log in again." });
+    }
+    res.status(401).json({ error: "Invalid or expired token." });
+  }
 };
 
 /* ══════════════════════════════════════════════════════════════════
@@ -312,24 +344,110 @@ app.post("/api/auth/reset-password/:token", async (req, res) => {
   }
 });
 
-/* ── Get Current User ───────────────────────────────────────────── */
-app.get("/api/auth/me", async (req, res) => {
+/* ─── Get Current User ───────────────────────────────────────────── */
+app.get("/api/auth/me", authenticateToken, async (req, res) => {
+  if (!checkDB(res)) return;
+  res.json({ user: req.user });
+});
+
+/* ─── Update User Profile ───────────────────────────────────────── */
+app.put("/api/auth/profile", authenticateToken, async (req, res) => {
+  if (!checkDB(res)) return;
+  const { name, email } = req.body;
+  try {
+    if (!name || !email) {
+      return res.status(400).json({ error: "Name and email are required." });
+    }
+
+    // Check if email is already taken by another user
+    if (email !== req.user.email) {
+      const existing = await User.findOne({ email: email.toLowerCase() });
+      if (existing) {
+        return res.status(409).json({ error: "Email is already in use." });
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, email: email.toLowerCase() },
+      { new: true }
+    ).select("-password");
+
+    res.json({ user: updatedUser });
+  } catch (err) {
+    console.error("Update Profile Error:", err.message);
+    res.status(500).json({ error: "Failed to update profile." });
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   HISTORY ROUTES
+══════════════════════════════════════════════════════════════════ */
+
+/* ── Save History ──────────────────────────────────────────────── */
+app.post("/api/history", authenticateToken, async (req, res) => {
+  if (!checkDB(res)) return;
+  const { analysis, company, role } = req.body;
+  try {
+    if (!analysis || !company || !role) {
+      return res.status(400).json({ error: "Missing required fields." });
+    }
+    const historyEntry = await AnalysisHistory.create({
+      userId: req.user._id,
+      analysis,
+      company,
+      role,
+      date: new Date().toLocaleDateString()
+    });
+    res.status(201).json(historyEntry);
+  } catch (err) {
+    console.error("Save History Error:", err.message);
+    res.status(500).json({ error: "Failed to save history." });
+  }
+});
+
+/* ── Get History ───────────────────────────────────────────────── */
+app.get("/api/history", authenticateToken, async (req, res) => {
   if (!checkDB(res)) return;
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided." });
-    }
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
-    if (!user) return res.status(401).json({ error: "User not found." });
-    res.json({ user });
+    const history = await AnalysisHistory.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    res.json(history);
   } catch (err) {
-    if (err.name === "TokenExpiredError") {
-      return res.status(401).json({ error: "Token expired. Please log in again." });
+    console.error("Get History Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch history." });
+  }
+});
+
+/* ─── Delete History ────────────────────────────────────────────── */
+app.delete("/api/history/:id", authenticateToken, async (req, res) => {
+  if (!checkDB(res)) return;
+  try {
+    const result = await AnalysisHistory.deleteOne({ _id: req.params.id, userId: req.user._id });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "History entry not found." });
     }
-    res.status(401).json({ error: "Invalid or expired token." });
+    res.json({ message: "History entry deleted." });
+  } catch (err) {
+    console.error("Delete History Error:", err.message);
+    res.status(500).json({ error: "Failed to delete history entry." });
+  }
+});
+
+/* ─── Update History Entry ─────────────────────────────────────── */
+app.patch("/api/history/:id", authenticateToken, async (req, res) => {
+  if (!checkDB(res)) return;
+  const { company, role } = req.body;
+  try {
+    const history = await AnalysisHistory.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user._id },
+      { company, role },
+      { new: true }
+    );
+    if (!history) return res.status(404).json({ error: "History entry not found." });
+    res.json(history);
+  } catch (err) {
+    console.error("Update History Error:", err.message);
+    res.status(500).json({ error: "Failed to update history entry." });
   }
 });
 
@@ -571,3 +689,5 @@ process.on("unhandledRejection", (reason, promise) => {
 
 // Connect to DB after setting up everything
 connectDB();
+
+

@@ -3,10 +3,60 @@
 const BASE = "/api";
 
 /* ─── helpers ──────────────────────────────────────────────────── */
+const getHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+};
+
 const post = async (url, body = {}) => {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getHeaders(),
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Something went wrong.");
+  return data;
+};
+
+const get = async (url) => {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: getHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Something went wrong.");
+  return data;
+};
+
+const put = async (url, body = {}) => {
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: getHeaders(),
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Something went wrong.");
+  return data;
+};
+
+const del = async (url) => {
+  const res = await fetch(url, {
+    method: "DELETE",
+    headers: getHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Something went wrong.");
+  return data;
+};
+
+const patch = async (url, body = {}) => {
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: getHeaders(),
     body: JSON.stringify(body)
   });
   const data = await res.json();
@@ -20,9 +70,17 @@ export const loginUser = (body) => post(`${BASE}/auth/login`, body);
 export const forgotPassword = (body) => post(`${BASE}/auth/forgot-password`, body);
 export const resetPassword = (token, password) =>
   post(`${BASE}/auth/reset-password/${token}`, { password });
+export const getCurrentUser = () => get(`${BASE}/auth/me`);
+export const updateProfile = (body) => put(`${BASE}/auth/profile`, body);
 
 /* ─── AI Analysis ───────────────────────────────────────────────── */
 export const analyzeResume = (body) => post(`${BASE}/analyze`, body);
+
+/* ─── History (DB Driven) ───────────────────────────────────────── */
+export const saveHistory = (body) => post(`${BASE}/history`, body);
+export const getHistory = () => get(`${BASE}/history`);
+export const deleteHistory = (id) => del(`${BASE}/history/${id}`);
+export const updateHistory = (id, body) => patch(`${BASE}/history/${id}`, body);
 
 /* ─── Session Helpers ────────────────────────────────────────────── */
 export const saveSession = (token, user) => {
@@ -118,57 +176,5 @@ export const getRoadmap = () => {
   } catch (e) {
     console.warn("Failed to read roadmap:", e);
     return null;
-  }
-};
-
-/* ─── Analysis History ──────────────────────────────────────────── */
-export const addToAnalysisHistory = (analysis, company, role) => {
-  try {
-    const existing = localStorage.getItem("analysisHistory");
-    const history = existing ? JSON.parse(existing) : [];
-    const newEntry = {
-      id: Date.now().toString(),
-      analysis,
-      company,
-      role,
-      createdAt: new Date().toISOString()
-    };
-    // Keep only last 10 analyses
-    const updated = [newEntry, ...history].slice(0, 10);
-    localStorage.setItem("analysisHistory", JSON.stringify(updated));
-    return newEntry.id;
-  } catch (e) {
-    console.warn("Failed to add to analysis history:", e);
-    return null;
-  }
-};
-
-export const getAnalysisHistory = () => {
-  try {
-    const h = localStorage.getItem("analysisHistory");
-    return h ? JSON.parse(h) : [];
-  } catch (e) {
-    console.warn("Failed to read analysis history:", e);
-    return [];
-  }
-};
-
-export const removeFromAnalysisHistory = (id) => {
-  try {
-    const existing = localStorage.getItem("analysisHistory");
-    if (!existing) return;
-    const history = JSON.parse(existing);
-    const updated = history.filter((item) => item.id !== id);
-    localStorage.setItem("analysisHistory", JSON.stringify(updated));
-  } catch (e) {
-    console.warn("Failed to remove from analysis history:", e);
-  }
-};
-
-export const clearAnalysisHistory = () => {
-  try {
-    localStorage.removeItem("analysisHistory");
-  } catch (e) {
-    console.warn("Failed to clear analysis history:", e);
   }
 };

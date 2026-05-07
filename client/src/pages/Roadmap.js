@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
-import { FaVolumeUp, FaVolumeMute, FaHome, FaDownload, FaSync, FaArrowLeft } from "react-icons/fa";
-import { getUser } from "../utils/api";
+import { FaVolumeUp, FaVolumeMute, FaHome, FaDownload, FaSync, FaArrowLeft, FaSave } from "react-icons/fa";
+import { getUser, saveHistory } from "../utils/api";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
@@ -40,8 +40,28 @@ const Roadmap = () => {
   const [sections, setSections] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
   const user = getUser();
+
+  const handleSaveHistory = async () => {
+    try {
+      setSaving(true);
+      const company = localStorage.getItem("selectedCompany") || "GENERAL";
+      const role = localStorage.getItem("selectedRole") || "SOFTWARE ENGINEER";
+      
+      await saveHistory({
+        analysis: rawText,
+        company,
+        role
+      });
+      alert("Roadmap saved to your profile history!");
+    } catch (err) {
+      alert(err.message || "Failed to save history.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     const savedRoadmap = localStorage.getItem("aiRoadmap");
@@ -165,9 +185,14 @@ const Roadmap = () => {
       <Star className="absolute bottom-20 left-[5%] opacity-60 animate-star" size={32} />
 
       <div className="max-w-4xl mx-auto relative z-10">
-        <Link to="/analysis" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
-          <FaArrowLeft size={10} /> Back to Analysis
-        </Link>
+        <div className="flex justify-between items-center mb-12">
+            <Link to="/analysis" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors">
+              <FaArrowLeft size={10} /> Back to Analysis
+            </Link>
+            <Link to="/dashboard" className="retro-btn-secondary !py-1.5 !px-3 flex items-center gap-2">
+                <FaHome size={12} /> <span className="text-[10px]">DASHBOARD</span>
+            </Link>
+        </div>
 
         {/* Header */}
         <div className="text-center mb-20">
@@ -231,6 +256,19 @@ const Roadmap = () => {
 
           <button onClick={handleDownload} className="retro-btn-primary !py-4 !px-8 flex items-center gap-3">
             <FaDownload /> DOWNLOAD PDF
+          </button>
+
+          <button
+            onClick={handleSaveHistory}
+            disabled={saving}
+            className="retro-btn-secondary !py-4 !px-8 flex items-center gap-3 !bg-retro-yellow !text-black border-retro-yellow"
+          >
+            {saving ? (
+              <div className="w-4 h-4 border-2 border-black border-t-transparent animate-spin rounded-full" />
+            ) : (
+              <FaSave />
+            )}
+            {saving ? "SAVING..." : "SAVE TO HISTORY"}
           </button>
 
           <button onClick={() => navigate("/dashboard")} className="retro-btn-secondary !py-4 !px-8 flex items-center gap-3 !bg-[var(--retro-text)] !text-[var(--retro-bg)]">

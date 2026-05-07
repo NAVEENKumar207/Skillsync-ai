@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
     FaUpload, FaBuilding, FaChartLine, FaRoute, FaSignOutAlt,
-    FaSync, FaSun, FaMoon, FaTrash
+    FaSync, FaSun, FaMoon, FaTrash, FaUser
 } from "react-icons/fa";
 import { getUser, clearSession } from "../utils/api";
 
@@ -20,7 +20,6 @@ const Star = ({ className, filled = true, size = 22 }) => (
 
 function Dashboard() {
     const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
-    const [history, setHistory] = useState([]);
     const navigate = useNavigate();
     const user = getUser();
 
@@ -33,27 +32,6 @@ function Dashboard() {
             localStorage.setItem("theme", "light");
         }
     }, [isDark]);
-
-    useEffect(() => {
-        const savedHistory = JSON.parse(localStorage.getItem("analysisHistory") || "[]");
-        
-        // Migration: If we have a roadmap but no history, add current to history
-        const currentRoadmap = localStorage.getItem("aiRoadmap");
-        if (savedHistory.length === 0 && currentRoadmap) {
-            const currentEntry = {
-                id: Date.now(),
-                date: new Date().toLocaleDateString(),
-                company: localStorage.getItem("selectedCompany")?.toUpperCase() || "GENERAL",
-                role: localStorage.getItem("selectedRole")?.toUpperCase() || "SOFTWARE ENGINEER",
-                analysis: currentRoadmap
-            };
-            const newHistory = [currentEntry];
-            localStorage.setItem("analysisHistory", JSON.stringify(newHistory));
-            setHistory(newHistory);
-        } else {
-            setHistory(savedHistory);
-        }
-    }, []);
 
     const toggleTheme = () => setIsDark(!isDark);
 
@@ -76,22 +54,6 @@ function Dashboard() {
             window.location.reload();
             navigate("/upload");
         }
-    };
-
-    const removeAnalysis = (id) => {
-        if (window.confirm("Delete this analysis from history?")) {
-            const updated = history.filter(item => item.id !== id);
-            setHistory(updated);
-            localStorage.setItem("analysisHistory", JSON.stringify(updated));
-        }
-    };
-
-    const viewPastAnalysis = (item) => {
-        localStorage.setItem("resumeText", "HISTORICAL_DATA"); // Placeholder
-        localStorage.setItem("selectedCompany", item.company);
-        localStorage.setItem("selectedRole", item.role);
-        localStorage.setItem("aiRoadmap", item.analysis);
-        navigate("/roadmap");
     };
 
     const steps = [
@@ -141,6 +103,9 @@ function Dashboard() {
                     >
                         {isDark ? <FaSun className="text-retro-yellow" /> : <FaMoon />}
                     </button>
+                    <Link to="/profile" className="retro-btn-secondary !py-1.5 !px-3 flex items-center gap-2">
+                        <FaUser size={12} /> <span className="text-[10px]">PROFILE</span>
+                    </Link>
                     <button onClick={handleReset} className="retro-btn-secondary !py-1.5 !px-3 hidden md:flex items-center gap-2">
                         <FaSync size={12} /> <span className="text-[10px]">RESET</span>
                     </button>
@@ -245,57 +210,6 @@ function Dashboard() {
                         </div>
                     </div>
                 </div>
-
-                {/* Past Analysis History */}
-                {history.length > 0 && (
-                    <div className="mt-20">
-                        <div className="flex items-center gap-4 mb-8">
-                            <Star size={20} />
-                            <h2 className="text-2xl font-display font-black uppercase tracking-tight text-retro-dark">
-                                Past Analysis History
-                            </h2>
-                            <div className="flex-1 h-[2px] bg-retro-dark opacity-10"></div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {history.map((item) => (
-                                <motion.div
-                                    key={item.id}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="retro-card !p-6 group relative border-2 border-retro-dark hover:border-retro-yellow transition-all"
-                                >
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); removeAnalysis(item.id); }}
-                                        className="absolute top-4 right-4 p-2 text-retro-dark opacity-20 hover:opacity-100 hover:text-red-500 transition-all z-20"
-                                        title="Remove from history"
-                                    >
-                                        <FaTrash size={14} />
-                                    </button>
-
-                                    <div className="mb-4">
-                                        <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">
-                                            {item.date}
-                                        </div>
-                                        <h3 className="font-display font-black uppercase text-lg leading-tight text-retro-dark group-hover:text-retro-yellow transition-colors">
-                                            {item.company}
-                                        </h3>
-                                        <p className="text-xs font-body opacity-70 text-retro-dark uppercase tracking-wider">
-                                            {item.role}
-                                        </p>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => viewPastAnalysis(item)}
-                                        className="w-full py-2 border-2 border-retro-dark font-display font-black text-[10px] uppercase tracking-widest hover:bg-retro-dark hover:text-white transition-all"
-                                    >
-                                        RE-ACTIVATE ROADMAP →
-                                    </button>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 <footer className="mt-20 border-t-2 border-retro-dark pt-8 flex flex-col md:flex-row justify-between items-center opacity-60 text-retro-dark text-[11px] font-black uppercase tracking-widest gap-4">
                     <div>SKILLSYNC AI · POWERED BY GROQ</div>

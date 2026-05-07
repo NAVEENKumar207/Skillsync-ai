@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 import Upload from "./pages/Upload";
 import Company from "./pages/Company";
 import Role from "./pages/Role";
@@ -41,6 +42,7 @@ function AnimatedRoutes() {
 
         {/* Protected Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
         <Route path="/company" element={<ProtectedRoute><Company /></ProtectedRoute>} />
         <Route path="/role" element={<ProtectedRoute><Role /></ProtectedRoute>} />

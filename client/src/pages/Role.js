@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaCode, FaServer, FaChartBar, FaShieldAlt, FaMobileAlt, FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { FaCode, FaServer, FaChartBar, FaShieldAlt, FaMobileAlt, FaArrowRight, FaArrowLeft, FaHome } from "react-icons/fa";
 
 const Star = ({ className, filled = true, size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 28 28" className={className}>
@@ -38,9 +38,14 @@ const Role = () => {
       <Star className="absolute bottom-10 left-[10%] opacity-60 animate-star" size={32} />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <Link to="/company" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors mb-12">
-          <FaArrowLeft size={10} /> Back to Company
-        </Link>
+        <div className="flex justify-between items-center mb-12">
+            <Link to="/company" className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[2px] text-retro-dark opacity-60 hover:opacity-100 transition-colors">
+              <FaArrowLeft size={10} /> Back to Company
+            </Link>
+            <Link to="/dashboard" className="retro-btn-secondary !py-1.5 !px-3 flex items-center gap-2">
+                <FaHome size={12} /> <span className="text-[10px]">DASHBOARD</span>
+            </Link>
+        </div>
 
         <div className="text-center mb-16">
           <div className="text-[10px] font-black tracking-[3px] opacity-60 text-retro-dark uppercase mb-4">
