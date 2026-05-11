@@ -41,11 +41,6 @@ Persist your AI-generated roadmap and analysis directly to your profile database
 ### 🛡️ [04] Identity Challenge Recovery
 A secure **Identity Challenge** system allows you to regain access using your **Security Color** or **Last Remembered Password**, eliminating the need for complex email integrations.
 
-### 🗺️ [05] The 90-Day Protocol
-- **Month 1: Foundation Rewriting** - Plugging the immediate technical leaks.
-- **Month 2: Production Build** - Guiding you through building a high-scale project.
-- **Month 3: Terminal Mastery** - Polishing your system design and behavioral storytelling.
-
 ---
 
 ## 🛠️ TECH STACK
@@ -89,22 +84,56 @@ A secure **Identity Challenge** system allows you to regain access using your **
 
 ---
 
-## 📂 PROJECT ARCHITECTURE (MODULAR)
+## 📂 DETAILED SYSTEM ARCHITECTURE
 
-The backend follows a professional, scalable folder structure using Express.js best practices:
+SkillSync AI follows a professional **Modular MVC-like architecture** designed for high maintainability, scalability, and testability.
 
+### 🏗️ 1. Backend Layer (Express.js)
+The backend is decoupled into specialized directories to enforce a strict **Separation of Concerns (SoC)**.
+
+#### **Directory Breakdown:**
+- **`config/`**: Centralized configuration management.
+  - `db.js`: Handles MongoDB Atlas connection with SRV and DNS fault-tolerance.
+  - `env.js`: Boot-time environment variable validation.
+- **`routes/`**: The entry point for all API requests. Routes are grouped by domain (auth, history, ai, etc.).
+- **`middlewares/`**: Interceptors for the request-response lifecycle.
+  - `authMiddleware.js`: Validates JWT tokens and injects user context.
+  - `rateLimitMiddleware.js`: Protects against brute-force and DDoS.
+  - `uploadMiddleware.js`: Manages in-memory file buffering for resumes.
+  - `errorMiddleware.js`: Unified catch-all for application-wide exceptions.
+- **`controllers/`**: Orchestrates the flow. It parses request data, invokes services, and returns standardized JSON responses.
+- **`services/`**: The "Brain" of the backend. Contains pure business logic and external integrations (Groq API, Resume Parsers).
+- **`models/`**: Defines the data structure and schema constraints using Mongoose.
+- **`utils/`**: Reusable utility functions (token generation, text sanitization, health checks).
+
+### 🔄 2. Backend Request Lifecycle
 ```text
-server/
-├── config/       # Database & Environment configuration
-├── controllers/  # Request handlers (Auth, AI, History, etc.)
-├── middlewares/  # Security, Upload, and Error handlers
-├── models/       # Mongoose Schemas
-├── routes/       # API Endpoint definitions
-├── services/     # Business logic (Groq API, Resume Parsing)
-├── utils/        # Shared utility functions
-├── app.js        # Express application setup
-└── server.js     # Entry point & server lifecycle
+[CLIENT REQUEST] 
+       ↓
+[RATE LIMITER] (middleware/rateLimitMiddleware.js)
+       ↓
+[AUTH CHECK] (middleware/authMiddleware.js)
+       ↓
+[ROUTING] (routes/*.js)
+       ↓
+[CONTROLLER] (controllers/*.js)
+       ↓
+[SERVICE LAYER] (services/*.js) ──→ [EXTERNAL API / DB]
+       ↓
+[JSON RESPONSE] 
 ```
+
+### 🧠 3. AI Processing Pipeline
+1. **Extraction**: Raw file buffers (PDF/DOCX) are parsed into plain text via `resumeService`.
+2. **Sanitization**: `sanitize.js` removes emails, secrets, and PII using regex patterns.
+3. **Context Injection**: The `aiController` constructs a high-density prompt combining the resume text with target role/company parameters.
+4. **LLM Execution**: `groqService` communicates with the Llama-3.3-70B model via a secure TLS connection.
+5. **Output Parsing**: The structured analysis is returned to the client and optionally persisted to MongoDB.
+
+### 🎨 4. Frontend Layer (React)
+- **State Management**: Local state for interactive UI, `localStorage` for session persistence.
+- **Theming**: Dynamic CSS variables driven by a dual-theme (Light/Dark) engine.
+- **Animations**: `framer-motion` for fluid page transitions and component-level entry effects.
 
 ---
 
