@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
     FaUpload, FaBuilding, FaChartLine, FaRoute, FaSignOutAlt,
-    FaSync, FaSun, FaMoon, FaTrash, FaUser
+    FaSync, FaSun, FaMoon, FaUser
 } from "react-icons/fa";
 import { getUser, clearSession } from "../utils/api";
 
@@ -15,7 +15,7 @@ const Star = ({ className, filled = true, size = 22 }) => (
       stroke="var(--retro-text)" 
       strokeWidth={filled ? "1.5" : "2"}
     />
-  </svg>
+  </svg>        
 );
 
 function Dashboard() {
@@ -153,7 +153,6 @@ function Dashboard() {
                 {/* Steps Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
                     {steps.map((step, i) => {
-                        const Icon = step.icon;
                         return (
                             <motion.div
                                 key={step.label}
