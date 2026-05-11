@@ -177,14 +177,16 @@ function Landing() {
 
           <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
-              { icon: FaEnvelope, label: "Email", href: "#" },
+              { icon: FaEnvelope, label: "Email", href: "mailto:support@skillsyncai.com" },
               { icon: FaTwitter, label: "X", href: "https://x.com/NaveenK51833756" },
-              { icon: FaLinkedin, label: "LinkedIn", href: "#" },
-              { icon: FaGithub, label: "GitHub", href: "#" },
+              { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com/company/skillsync-ai" },
+              { icon: FaGithub, label: "GitHub", href: "https://github.com/skillsync-ai" },
             ].map((contact, i) => (
               <a
                 key={i}
                 href={contact.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center justify-center w-16 h-16 border-2 border-[var(--retro-bg)] opacity-20 hover:opacity-100 hover:border-retro-yellow transition-all duration-300 rounded-[4px]"
               >
                 <contact.icon className="text-2xl text-[var(--retro-bg)] group-hover:text-retro-yellow transition-colors duration-300" />
@@ -201,9 +203,9 @@ function Landing() {
         </div>
         <div className="flex flex-wrap justify-center gap-8">
           {['Privacy', 'Terms', 'Help', 'Career'].map((link) => (
-            <a key={link} href="#" className="text-[11px] font-black uppercase tracking-[1px] opacity-60 text-retro-dark hover:text-retro-yellow transition-colors">
+            <button key={link} type="button" className="text-[11px] font-black uppercase tracking-[1px] opacity-60 text-retro-dark hover:text-retro-yellow transition-colors bg-transparent border-none p-0 cursor-pointer">
               {link}
-            </a>
+            </button>
           ))}
         </div>
         <div className="text-[11px] opacity-40 text-retro-dark font-body">
