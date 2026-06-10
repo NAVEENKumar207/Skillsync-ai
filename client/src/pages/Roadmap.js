@@ -130,50 +130,179 @@ const Roadmap = () => {
     const margin = 20;
     const contentWidth = pageWidth - (margin * 2);
 
-    const drawText = (text, x, y, size, style = "normal", color = [34, 34, 34]) => {
-      doc.setFont("helvetica", style);
-      doc.setFontSize(size);
-      doc.setTextColor(color[0], color[1], color[2]);
-      
-      const cleanText = text.replace(/\*\*/g, "").replace(/###/g, "").replace(/^- /gm, "• ").trim();
-      const lines = doc.splitTextToSize(cleanText, contentWidth);
-      
-      lines.forEach(line => {
-        if (y > pageHeight - 25) {
-          doc.addPage();
-          y = 25;
-        }
-        doc.text(line, x, y);
-        y += size * 0.5;
-      });
-      return y + 5;
+    const colors = {
+      bg: [245, 242, 232], // #F5F2E8
+      dark: [34, 34, 34], // #222222
+      yellow: [232, 200, 34], // #E8C822
+      paper: [232, 228, 216] // #E8E4D8
     };
 
-    doc.setFillColor(34, 34, 34);
-    doc.rect(0, 0, pageWidth, 50, "F");
-    
-    doc.setTextColor(232, 200, 34);
-    doc.setFontSize(26);
-    doc.setFont("helvetica", "bold");
-    doc.text("SKILLSYNC AI REPORT", margin, 30);
-    
+    const drawBackground = () => {
+      doc.setFillColor(colors.bg[0], colors.bg[1], colors.bg[2]);
+      doc.rect(0, 0, pageWidth, pageHeight, "F");
+      
+      // Grid lines for retro feel
+      doc.setDrawColor(colors.paper[0], colors.paper[1], colors.paper[2]);
+      doc.setLineWidth(0.1);
+      for (let i = 0; i < pageWidth; i += 15) doc.line(i, 0, i, pageHeight);
+      for (let i = 0; i < pageHeight; i += 15) doc.line(0, i, pageWidth, i);
+    };
+
+    const drawHeader = () => {
+      // Dark Header Bar
+      doc.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.rect(0, 0, pageWidth, 50, "F");
+      
+      // Main Title
+      doc.setTextColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(28);
+      doc.text("SKILLSYNC", margin, 30);
+      
+      const titleWidth = doc.getTextWidth("SKILLSYNC");
+      
+      // AI Badge
+      doc.setFillColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.rect(margin + titleWidth + 4, 18, 14, 14, "F");
+      doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.setFontSize(10);
+      doc.text("AI", margin + titleWidth + 8, 27.5);
+      
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(255, 255, 255);
+      doc.text("PERSONALIZED CAREER EVOLUTION ROADMAP", margin, 42);
+      
+      // Decorative line
+      doc.setDrawColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.setLineWidth(1);
+      doc.line(margin, 34, margin + titleWidth, 34);
+    };
+
+    const drawFooter = (pageNum) => {
+      doc.setFontSize(8);
+      doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.setFont("helvetica", "bold");
+      doc.text(`GENERATED FOR ${user?.name?.toUpperCase() || "USER"}`, margin, pageHeight - 10);
+      doc.text(`PAGE ${pageNum}`, pageWidth - margin - 15, pageHeight - 10);
+      
+      doc.setDrawColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.setLineWidth(0.5);
+      doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
+    };
+
+    const drawStar = (x, y, size) => {
+      const points = [];
+      const startX = x + size * Math.cos(-Math.PI / 2);
+      const startY = y + size * Math.sin(-Math.PI / 2);
+      let prevX = startX;
+      let prevY = startY;
+
+      for (let i = 1; i <= 10; i++) {
+        const r = i % 2 === 0 ? size : size * 0.4;
+        const angle = (i * Math.PI) / 5 - Math.PI / 2;
+        const currX = x + r * Math.cos(angle);
+        const currY = y + r * Math.sin(angle);
+        points.push([currX - prevX, currY - prevY]);
+        prevX = currX;
+        prevY = currY;
+      }
+
+      doc.setFillColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.setDrawColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.setLineWidth(0.5);
+      // 'FD' means Fill then Stroke (Draw)
+      doc.lines(points, startX, startY, [1, 1], "FD", true);
+    };
+
     let currentY = 65;
-    doc.setTextColor(34, 34, 34);
+    let pageNum = 1;
+
+    drawBackground();
+    drawHeader();
+    drawFooter(pageNum);
+
+    // Candidate Info section
+    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     doc.setFontSize(10);
-    doc.text(`Candidate: ${user?.name || "User"}`, margin, currentY);
-    currentY += 15;
+    doc.setFont("helvetica", "bold");
+    doc.text(`CANDIDATE:`, margin, currentY);
+    doc.setFont("helvetica", "normal");
+    doc.text(user?.name || "User", margin + 25, currentY);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text(`DATE:`, pageWidth - margin - 50, currentY);
+    doc.setFont("helvetica", "normal");
+    doc.text(new Date().toLocaleDateString(), pageWidth - margin - 35, currentY);
+    
+    currentY += 20;
 
     sections.forEach((sec, i) => {
+      // Check if we need a new page for the section header
       if (currentY > pageHeight - 40) {
         doc.addPage();
+        pageNum++;
+        drawBackground();
+        drawFooter(pageNum);
         currentY = 25;
       }
+
+      // Section Marker (Yellow Box)
+      doc.setFillColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.setDrawColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.setLineWidth(0.8);
+      doc.rect(margin, currentY, 12, 12, "FD");
+      
+      // Shadow for box
+      doc.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+      doc.rect(margin + 1, currentY + 1, 12, 12, "F");
+      doc.setFillColor(colors.yellow[0], colors.yellow[1], colors.yellow[2]);
+      doc.rect(margin, currentY, 12, 12, "FD");
+
+      doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text(`${i+1}. ${sec.title.toUpperCase()}`, margin, currentY);
-      currentY += 8;
-      currentY = drawText(sec.content, margin, currentY, 10);
-      currentY += 10;
+      doc.setFontSize(12);
+      doc.text(String(i + 1).padStart(2, '0'), margin + 3, currentY + 8);
+      
+      doc.setFontSize(16);
+      doc.text(sec.title.toUpperCase(), margin + 18, currentY + 9);
+      
+      currentY += 20;
+
+      // Section Content
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.setTextColor(60, 60, 60);
+      
+      const cleanContent = sec.content
+        .replace(/\*\*/g, "")
+        .replace(/###/g, "")
+        .replace(/^- /gm, "• ")
+        .trim();
+        
+      const lines = doc.splitTextToSize(cleanContent, contentWidth - 10);
+      
+      lines.forEach(line => {
+        if (currentY > pageHeight - 20) {
+          doc.addPage();
+          pageNum++;
+          drawBackground();
+          drawFooter(pageNum);
+          currentY = 25;
+          
+          // Re-draw section title hint on new page? Maybe not.
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(11);
+          doc.setTextColor(60, 60, 60);
+        }
+        doc.text(line, margin + 5, currentY);
+        currentY += 7;
+      });
+      
+      // Decorative star at the end of each section
+      drawStar(pageWidth - margin - 5, currentY, 4);
+      
+      currentY += 15;
     });
 
     doc.save(`SkillSync-Roadmap.pdf`);
