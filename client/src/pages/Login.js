@@ -93,7 +93,7 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="retro-input uppercase placeholder:opacity-50"
+                className="retro-input placeholder:opacity-50"
               />
             </div>
 

@@ -202,7 +202,7 @@ function Upload() {
                   value={pastedText}
                   onChange={(e) => setPastedText(e.target.value)}
                   placeholder="PASTE YOUR RESUME CONTENT HERE... (SKILLS, EXPERIENCE, EDUCATION)"
-                  className="retro-input !min-h-[280px] !font-body !text-base !p-6 resize-none placeholder:opacity-30 uppercase"
+                  className="retro-input !min-h-[280px] !font-body !text-base !p-6 resize-none placeholder:opacity-30"
                 />
                 <p className="text-[10px] font-black mt-4 text-right uppercase tracking-widest text-retro-dark opacity-60">
                   {pastedText.length} CHARACTERS

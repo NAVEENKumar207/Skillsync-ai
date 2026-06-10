@@ -100,7 +100,7 @@ function Signup() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="retro-input uppercase placeholder:opacity-50"
+                className="retro-input placeholder:opacity-50"
               />
             </div>
 
@@ -112,7 +112,7 @@ function Signup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="retro-input uppercase placeholder:opacity-50"
+                className="retro-input placeholder:opacity-50"
               />
             </div>
 
@@ -186,7 +186,7 @@ function Signup() {
                 value={favoriteColor}
                 onChange={(e) => setFavoriteColor(e.target.value)}
                 required
-                className="retro-input uppercase placeholder:opacity-50"
+                className="retro-input placeholder:opacity-50"
               />
             </div>
 

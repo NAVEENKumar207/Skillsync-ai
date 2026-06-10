@@ -68,7 +68,7 @@ const Company = () => {
             <input
               type="text"
               placeholder="SEARCH ORGANIZATIONS..."
-              className="retro-input !pl-12 uppercase placeholder:opacity-30"
+              className="retro-input !pl-12 placeholder:opacity-30"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

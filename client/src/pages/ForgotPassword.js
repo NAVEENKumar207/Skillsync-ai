@@ -95,7 +95,7 @@ function ForgotPassword() {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
-                                            className="retro-input uppercase"
+                                            className="retro-input"
                                         />
                                     </div>
 
@@ -112,7 +112,7 @@ function ForgotPassword() {
                                             placeholder="SECRET COLOR"
                                             value={favoriteColor}
                                             onChange={(e) => setFavoriteColor(e.target.value)}
-                                            className="retro-input uppercase"
+                                            className="retro-input"
                                         />
                                     </div>
 

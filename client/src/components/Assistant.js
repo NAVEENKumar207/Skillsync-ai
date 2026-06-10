@@ -168,7 +168,7 @@ function Assistant() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKey}
                 placeholder="ASK ME ANYTHING..."
-                className="retro-input !py-3 !text-xs uppercase placeholder:opacity-30"
+                className="retro-input !py-3 !text-xs placeholder:opacity-30"
                 disabled={loading}
               />
               <button
